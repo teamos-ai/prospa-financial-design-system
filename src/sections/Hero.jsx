@@ -1,3 +1,5 @@
+import InteractiveGrid from '../components/InteractiveGrid.jsx'
+
 // Hero — the overview header with the brand gradient and headline stats.
 const heroSwatches = ['#135f69', '#5dce38', '#d0dfe1', '#f2fbef', '#616773', '#121212']
 
@@ -11,6 +13,7 @@ const heroMeta = [
 export default function Hero() {
   return (
     <header className="hero" id="overview">
+      <InteractiveGrid />
       <div className="wrap">
         <div className="eyebrow" style={{ color: '#7fd4a0' }}>
           Brand &amp; Product Design System

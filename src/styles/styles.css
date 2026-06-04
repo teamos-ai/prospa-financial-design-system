@@ -214,6 +214,37 @@ section:last-of-type {
 .hero .wrap {
   position: relative;
   z-index: 2;
+  /* Let hover pass through the copy to the interactive grid behind it.
+     The hero has no interactive controls, so nothing is lost. */
+  pointer-events: none;
+}
+
+/* ---- Interactive hero grid ---- */
+.ig-root {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ig-main {
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+.ig-subgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.ig-cell {
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: transparent;
+  pointer-events: auto;
+  transition: background-color 0.55s var(--ease);
 }
 .hero h1 {
   color: #fff;
