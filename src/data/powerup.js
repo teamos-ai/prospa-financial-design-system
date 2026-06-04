@@ -16,6 +16,8 @@ export const aiSuggestions = [
   { cmd: '/explain', label: 'salary sacrifice', icon: 'doc', key: 'sacrifice' },
   { cmd: '/review', label: 'my budget', icon: 'chart', key: 'budget' },
   { cmd: '/stack', label: 'first home buyer', icon: 'stack', key: 'firsthome' },
+  { cmd: '/grow', label: 'my wealth', icon: 'growth', key: 'grow' },
+  { cmd: '/protect', label: 'my family', icon: 'shield', key: 'protect' },
 ]
 
 export const BOOK_A_CALL_URL = 'https://prospafinancial.com.au/contact-us/'
@@ -74,6 +76,22 @@ export const aiResponses = {
     ],
     cta: 'Estimate repayments on a target purchase price with the Mortgage calculator below.',
   },
+  grow: {
+    paras: [
+      'Growing wealth comes down to three things: time in the market, diversification, and keeping fees low.',
+      'Even $500 a month at a 6.5% return grows to about $230,000 over 20 years — and most of that is investment growth, not your contributions.',
+    ],
+    bullets: [],
+    cta: 'See it for yourself in the Compound Growth calculator below.',
+  },
+  protect: {
+    paras: [
+      'Protecting your family is about the right mix of life, TPD, trauma and income-protection cover — sized to your debts, dependants and lifestyle, not a one-size-fits-all default.',
+      'A simple starting point: enough to clear the mortgage, replace a few years of income, and cover the kids’ education.',
+    ],
+    bullets: [],
+    cta: 'A Prospa adviser can tailor this to your situation.',
+  },
   fallback: {
     paras: [
       'Great question. In a live deployment, I’d answer that from Prospa’s vetted knowledge base with figures tailored to you — instantly, any time of day.',
@@ -91,6 +109,8 @@ export function matchResponseKey(text) {
   if (/retire|pension|nest egg/.test(t)) return 'retirement'
   if (/super|fund|smsf/.test(t)) return 'super'
   if (/sacrifice|contribut|concessional/.test(t)) return 'sacrifice'
+  if (/protect|insurance|cover|life insurance|tpd|trauma|income protection/.test(t)) return 'protect'
+  if (/grow|invest|wealth|portfolio|share|etf/.test(t)) return 'grow'
   if (/budget|spend|save|saving/.test(t)) return 'budget'
   if (/home|mortgage|property|deposit|first/.test(t)) return 'firsthome'
   if (/tax|income/.test(t)) return 'sacrifice'

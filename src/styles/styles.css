@@ -1441,8 +1441,9 @@ section:last-of-type {
   display: flex;
   gap: 11px;
   align-items: flex-start;
-  max-width: 760px;
-  margin: 0 auto 18px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto 20px;
   background: #fff9f0;
   border: 1px solid #f0e1c8;
   border-radius: 12px;
@@ -1459,13 +1460,14 @@ section:last-of-type {
   color: #7a5b33;
 }
 .ai-bar {
-  max-width: 880px;
+  width: 100%;
+  max-width: 1240px;
   margin: 0 auto;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 22px;
-  padding: 24px 26px 18px;
-  box-shadow: 0 20px 54px rgba(19, 95, 105, 0.13);
+  border-radius: 24px;
+  padding: 26px 30px 20px;
+  box-shadow: 0 22px 60px rgba(19, 95, 105, 0.12);
 }
 .ai-bar-input {
   display: flex;
@@ -1653,7 +1655,9 @@ section:last-of-type {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-top: 52px;
+  width: 100%;
+  max-width: 1080px;
+  margin: 52px auto 0;
 }
 .ai-chip {
   font-family: 'Poppins', sans-serif;
