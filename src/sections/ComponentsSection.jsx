@@ -1,5 +1,4 @@
 import SectionHead from '../components/SectionHead.jsx'
-import BrandMark from '../components/BrandMark.jsx'
 import Badge from '../components/Badge.jsx'
 import Accordion from '../components/Accordion.jsx'
 import Icon from '../components/Icon.jsx'
@@ -32,7 +31,9 @@ export default function ComponentsSection() {
       <div className="sub-h">Navigation Bar</div>
       <div className="nav-demo">
         <div className="brand" style={{ gap: 10 }}>
-          <BrandMark size={30} className="" />
+          <span className="brand-logo brand-logo-sm">
+            <img src="/prospa-logo.png" alt="Prospa Financial logo" width="34" height="34" />
+          </span>
           <div className="brand-name">
             <b style={{ color: 'var(--ink)', fontSize: 16 }}>PROSPA</b>
           </div>

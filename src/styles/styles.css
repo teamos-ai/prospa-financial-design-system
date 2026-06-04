@@ -166,6 +166,14 @@ code,
   object-fit: contain;
   display: block;
 }
+/* Smaller chip for the on-white nav-bar pattern demo. */
+.brand-logo-sm {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(10, 54, 60, 0.12), inset 0 0 0 1px var(--line);
+}
 .brand-name {
   display: flex;
   flex-direction: column;
