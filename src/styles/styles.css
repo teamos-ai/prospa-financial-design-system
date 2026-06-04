@@ -1715,18 +1715,25 @@ section:last-of-type {
 /* Bento grid — tall inputs column + visual result cards */
 .calc-bento {
   display: grid;
-  gap: 14px;
+  gap: 9px;
   grid-template-columns: 270px 1fr 1fr;
   grid-template-areas:
     'inputs hero hero'
     'inputs donut bars'
     'inputs image image';
-  margin-top: 4px;
+  margin-top: 10px;
+  /* Square off the whole calculator inside one framed tray; tiles sit close
+     together with small gutters (gallery-frame look). */
+  padding: 12px;
+  background: #f3f8f7;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-card);
 }
 .bento-card {
   background: #fff;
   border: 1px solid #eef3f3;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-sm);
   padding: 20px;
   box-shadow: var(--sh-card);
   min-width: 0;
@@ -2026,7 +2033,7 @@ section:last-of-type {
   display: flex;
 }
 .calc-img.has-img {
-  border-radius: var(--r-lg);
+  border-radius: var(--r-sm);
   box-shadow: var(--sh-card);
 }
 .calc-img img {
@@ -2059,7 +2066,7 @@ section:last-of-type {
 .calc-img-ph {
   flex: 1;
   border: 2px dashed #cddedd;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
