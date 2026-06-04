@@ -6,6 +6,7 @@ nature / glossy / soft-blurred image here with the matching name and it will
 appear automatically (a gentle teal gloss overlay is applied for depth):
 
   public/calc/compound.jpg     → Compound Growth calculator
+  public/calc/budget.jpg       → Budget & Cash Flow calculator
   public/calc/super.jpg        → Superannuation calculator
   public/calc/retirement.jpg   → Retirement Needs calculator
   public/calc/mortgage.jpg     → Mortgage calculator

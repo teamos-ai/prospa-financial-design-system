@@ -551,8 +551,107 @@ function RetirementCalc() {
   )
 }
 
+// 6) Budget & cash flow -------------------------------------------------------
+const DEBT_BUFFER = 0.8 // share of surplus a lender would let you commit to new debt
+const NEW_LOAN_TERM = 30 // years, for the borrowing-power estimate
+function BudgetCalc() {
+  const [income, setIncome] = useState(7000)
+  const [housing, setHousing] = useState(2200)
+  const [essentials, setEssentials] = useState(1800)
+  const [lifestyle, setLifestyle] = useState(1200)
+  const [debt, setDebt] = useState(400)
+  const [rate, setRate] = useState(9.0)
+
+  const expenses = housing + essentials + lifestyle + debt
+  const surplus = income - expenses
+  const savingsRate = income > 0 ? surplus / income : 0
+  const available = Math.max(0, surplus) * DEBT_BUFFER
+  const i = rate / 100 / 12
+  const n = NEW_LOAN_TERM * 12
+  const borrowingPower = i === 0 ? available * n : (available * (1 - (1 + i) ** -n)) / i
+
+  const signed = (v) => (v < 0 ? `−${fmt(Math.abs(v))}` : fmt(v))
+
+  const segs = [
+    { label: 'Housing', value: housing, color: PALETTE.teal, display: fmt(housing) },
+    { label: 'Living essentials', value: essentials, color: PALETTE.tealSoft, display: fmt(essentials) },
+    { label: 'Lifestyle', value: lifestyle, color: PALETTE.ember, display: fmt(lifestyle) },
+    { label: 'Debt repayments', value: debt, color: PALETTE.tealDeep, display: fmt(debt) },
+    { label: 'Surplus', value: Math.max(0, surplus), color: PALETTE.green, display: signed(surplus) },
+  ]
+
+  return (
+    <Bento
+      imgKey="budget"
+      inputs={
+        <>
+          <Field label="Net monthly income" value={income} onChange={setIncome} min={0} max={30000} step={100} prefix="$" />
+          <Field label="Housing (rent / mortgage)" value={housing} onChange={setHousing} min={0} max={15000} step={50} prefix="$" />
+          <Field label="Living essentials" value={essentials} onChange={setEssentials} min={0} max={10000} step={50} prefix="$" />
+          <Field label="Lifestyle & discretionary" value={lifestyle} onChange={setLifestyle} min={0} max={10000} step={50} prefix="$" />
+          <Field label="Existing debt repayments" value={debt} onChange={setDebt} min={0} max={10000} step={50} prefix="$" />
+          <Field label="New-loan rate (incl. buffer)" value={rate} onChange={setRate} min={0} max={15} step={0.1} suffix="%" />
+          <div className="calc-mini">
+            <div className="calc-mini-row">
+              <span>Savings rate</span>
+              <b>{pct(savingsRate)}</b>
+            </div>
+            <div className="calc-mini-row">
+              <span>Est. borrowing power</span>
+              <b>{fmt(borrowingPower)}</b>
+            </div>
+          </div>
+        </>
+      }
+      hero={
+        <HeroStat
+          label={surplus >= 0 ? 'Monthly surplus' : 'Monthly shortfall'}
+          value={signed(surplus)}
+          delta={`${pct(savingsRate)} of income`}
+          deltaEmber={surplus < 0}
+          spark={
+            <Sparkline
+              points={[income, income - housing, income - housing - essentials, income - housing - essentials - lifestyle, surplus]}
+              color="#8fe06a"
+            />
+          }
+        />
+      }
+      donut={
+        <>
+          <div className="bento-h">Where your money goes</div>
+          <div className="donut-wrap">
+            <Donut segments={segs} label="Income" value={fmt(income)} />
+            <Legend items={segs} />
+          </div>
+        </>
+      }
+      bars={
+        <>
+          <div className="bento-h">Monthly cash flow</div>
+          <Bars
+            items={[
+              { label: 'Income', value: income, display: fmt(income), color: PALETTE.green },
+              { label: 'Total expenses', value: expenses, display: fmt(expenses), color: PALETTE.teal },
+              { label: surplus >= 0 ? 'Surplus' : 'Shortfall', value: Math.max(0, surplus), display: signed(surplus), color: PALETTE.ember },
+            ]}
+          />
+          <p className={'calc-warn' + (surplus > 0 ? ' ok' : '')}>
+            {surplus > 0
+              ? `You could direct ${fmt(available)}/mo to goals — serviceable extra borrowing ≈ ${fmt(borrowingPower)} at ${rate}% over ${NEW_LOAN_TERM} yrs.`
+              : surplus === 0
+                ? 'You’re breaking even — no surplus to service new debt yet.'
+                : `Spending exceeds income by ${fmt(Math.abs(surplus))}/mo — trim expenses before taking on new debt.`}
+          </p>
+        </>
+      }
+    />
+  )
+}
+
 const TABS = [
   { key: 'compound', label: 'Compound Growth', el: CompoundCalc },
+  { key: 'budget', label: 'Budget & Cash Flow', el: BudgetCalc },
   { key: 'super', label: 'Superannuation', el: SuperCalc },
   { key: 'retirement', label: 'Retirement Needs', el: RetirementCalc },
   { key: 'mortgage', label: 'Mortgage', el: MortgageCalc },
