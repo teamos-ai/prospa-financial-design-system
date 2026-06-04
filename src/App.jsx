@@ -11,6 +11,7 @@ import CardsSection from './sections/CardsSection.jsx'
 import FormsSection from './sections/FormsSection.jsx'
 import ComponentsSection from './sections/ComponentsSection.jsx'
 import IconsSection from './sections/IconsSection.jsx'
+import LibrarySection from './sections/LibrarySection.jsx'
 import MotionSection from './sections/MotionSection.jsx'
 import VoiceSection from './sections/VoiceSection.jsx'
 
@@ -56,6 +57,7 @@ export default function App() {
             <FormsSection />
             <ComponentsSection />
             <IconsSection />
+            <LibrarySection />
             <MotionSection />
             <VoiceSection />
           </div>

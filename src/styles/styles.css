@@ -1325,6 +1325,302 @@ section:last-of-type {
   border-radius: 6px;
 }
 
+/* ============ IMAGE LIBRARY ============ */
+.lib-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.lib-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 11px 14px;
+  background: #fff;
+  max-width: 360px;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.lib-search:focus-within {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(19, 95, 105, 0.1);
+}
+.lib-search svg {
+  color: var(--gray);
+  flex: none;
+}
+.lib-search input {
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  width: 100%;
+  background: transparent;
+}
+.lib-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lib-chip {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--slate);
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  padding: 7px 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.lib-chip span {
+  font-size: 11px;
+  color: var(--gray);
+  background: #fff;
+  border-radius: 20px;
+  padding: 1px 7px;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.lib-chip:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+.lib-chip.on {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+}
+.lib-chip.on span {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+.lib-count {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 18px;
+}
+.lib-empty {
+  padding: 44px;
+  text-align: center;
+  color: var(--gray);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-lg);
+}
+.lib-empty button {
+  background: none;
+  border: none;
+  color: var(--teal);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.lib-grid {
+  columns: 4 220px;
+  column-gap: 16px;
+}
+.lib-card {
+  break-inside: avoid;
+  margin: 0 0 16px;
+  position: relative;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg2);
+  box-shadow: var(--sh-card);
+  outline: none;
+}
+.lib-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s var(--ease);
+}
+.lib-card:hover img,
+.lib-card:focus-visible img {
+  transform: scale(1.04);
+}
+.lib-cap {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 30px 14px 12px;
+  background: linear-gradient(to top, rgba(10, 54, 60, 0.92), rgba(10, 54, 60, 0));
+  color: #fff;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.lib-card:hover .lib-cap,
+.lib-card:focus-visible .lib-cap {
+  opacity: 1;
+  transform: translateY(0);
+}
+.lib-cap b {
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  color: #fff;
+}
+.lib-cap-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.lib-cap-tags span {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.lib-card:focus-visible {
+  box-shadow: 0 0 0 3px rgba(19, 95, 105, 0.45);
+}
+
+/* Lightbox */
+.lib-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(8, 32, 36, 0.86);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: lib-fade 0.25s var(--ease);
+}
+@keyframes lib-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.lib-lb-fig {
+  margin: 0;
+  background: #fff;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  max-width: 920px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  max-height: 86vh;
+}
+.lib-lb-fig img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-height: 86vh;
+  display: block;
+}
+.lib-lb-fig figcaption {
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lib-lb-fig figcaption b {
+  font-size: 22px;
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.lib-lb-fig figcaption p {
+  font-size: 14.5px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+.lib-lb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: auto;
+}
+.lib-lb-tags span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal);
+  background: var(--bg1);
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+}
+.lib-lb-fig code {
+  font-size: 12px;
+  color: var(--gray);
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 6px 10px;
+  word-break: break-all;
+}
+.lib-lb-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s var(--ease);
+}
+.lib-lb-close:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.lib-lb-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s var(--ease);
+}
+.lib-lb-nav:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.lib-lb-nav.prev {
+  left: 20px;
+}
+.lib-lb-nav.next {
+  right: 20px;
+}
+@media (max-width: 760px) {
+  .lib-lb-fig {
+    grid-template-columns: 1fr;
+    max-height: 90vh;
+    overflow: auto;
+  }
+  .lib-lb-fig img {
+    max-height: 48vh;
+  }
+}
+
 .footer {
   background: var(--teal-900);
   color: #7fb0ab;

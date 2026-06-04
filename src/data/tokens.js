@@ -111,6 +111,7 @@ export const navItems = [
   { id: 'forms', label: 'Forms' },
   { id: 'components', label: 'Components' },
   { id: 'icons', label: 'Iconography' },
+  { id: 'library', label: 'Image Library' },
   { id: 'motion', label: 'Motion' },
   { id: 'voice', label: 'Voice & Tone' },
 ]
