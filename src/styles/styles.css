@@ -466,17 +466,21 @@ section:last-of-type {
   border-bottom: none;
   background: radial-gradient(120% 120% at 85% 0%, #1a7079 0%, var(--teal) 45%, var(--teal-900) 100%);
   color: #fff;
-  padding: 96px 0 88px;
+  padding: 96px 0 190px;
 }
+/* Gradual teal → white fade at the bottom so the hero blends seamlessly into
+   the white body below. Sits behind the content (z-index 2) and above the
+   grid, so it whitens the background/grid without washing the copy. */
 .hero::after {
   content: '';
   position: absolute;
-  right: -120px;
-  bottom: -160px;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, rgba(93, 206, 56, 0.32), transparent 62%);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 190px;
+  background: linear-gradient(to bottom, transparent 0%, var(--bg0) 90%);
   pointer-events: none;
+  z-index: 1;
 }
 .hero .wrap {
   position: relative;
