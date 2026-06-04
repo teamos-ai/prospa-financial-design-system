@@ -111,6 +111,7 @@ export const navItems = [
   { id: 'forms', label: 'Forms' },
   { id: 'components', label: 'Components' },
   { id: 'powerup', label: 'Power-Up' },
+  { id: 'calculators', label: 'Calculators' },
   { id: 'icons', label: 'Iconography' },
   { id: 'library', label: 'Image Library' },
   { id: 'motion', label: 'Motion' },

@@ -1326,39 +1326,44 @@ section:last-of-type {
 }
 
 /* ============ POWER-UP: AI CHAT DEMO ============ */
+/* Full-bleed hero: the AI chat takes the whole screen, with gentle on-brand
+   glows fading in from the edges so the centred chat box stays the focus. */
+.ai-screen {
+  padding: 0;
+  border-bottom: none;
+}
 .ai-demo {
   position: relative;
-  border: 1px solid var(--line);
-  border-radius: var(--r-xl);
-  padding: 48px 44px 40px;
-  background: radial-gradient(60% 80% at 0% 0%, rgba(93, 206, 56, 0.13), transparent 60%),
-    radial-gradient(60% 80% at 100% 0%, rgba(19, 95, 105, 0.13), transparent 60%), #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 96px 40px;
   overflow: hidden;
+  background: radial-gradient(34% 52% at 0% 50%, rgba(93, 206, 56, 0.12), transparent 72%),
+    radial-gradient(34% 52% at 100% 50%, rgba(19, 95, 105, 0.12), transparent 72%),
+    radial-gradient(48% 30% at 50% 0%, rgba(93, 206, 56, 0.06), transparent 70%),
+    radial-gradient(48% 34% at 50% 100%, rgba(19, 95, 105, 0.06), transparent 70%), #fff;
 }
 .ai-hero {
   text-align: center;
-  max-width: 600px;
-  margin: 0 auto 24px;
+  max-width: 640px;
+  margin: 0 auto 26px;
 }
 .ai-title {
-  font-size: 40px;
+  font-size: 52px;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
   color: var(--ink);
 }
 .ai-title em {
   font-style: normal;
-  background: var(--green);
-  color: #0a363c;
-  padding: 0 0.16em;
-  border-radius: 9px;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  color: var(--teal);
 }
 .ai-sub {
-  margin-top: 16px;
-  font-size: 16.5px;
+  margin-top: 18px;
+  font-size: 18px;
   color: var(--gray);
   line-height: 1.6;
 }
@@ -1511,6 +1516,24 @@ section:last-of-type {
 .ai-msg.ai .ai-cta {
   color: var(--teal);
   font-weight: 600;
+}
+.ai-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  background: var(--green);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 11px;
+  box-shadow: 0 6px 16px rgba(93, 206, 56, 0.3);
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.ai-action:hover {
+  background: var(--green-600);
+  transform: translateY(-1px);
 }
 .ai-msg.ai .ai-tag {
   display: block;
@@ -1800,10 +1823,13 @@ section:last-of-type {
     grid-template-columns: 1fr;
   }
   .ai-demo {
-    padding: 32px 20px;
+    padding: 64px 20px;
   }
   .ai-title {
-    font-size: 30px;
+    font-size: 34px;
+  }
+  .ai-sub {
+    font-size: 16px;
   }
 }
 

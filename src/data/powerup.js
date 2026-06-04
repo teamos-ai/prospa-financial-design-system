@@ -10,6 +10,7 @@ export const GENERAL_ADVICE_WARNING =
 
 // Command-bar suggestion chips (slash-command style, like the reference).
 export const aiSuggestions = [
+  { cmd: '/book', label: 'a call', icon: 'call', key: 'book' },
   { cmd: '/calculate', label: 'retirement income', icon: 'retire', key: 'retirement' },
   { cmd: '/compare', label: 'super funds', icon: 'compare', key: 'super' },
   { cmd: '/explain', label: 'salary sacrifice', icon: 'doc', key: 'sacrifice' },
@@ -17,9 +18,20 @@ export const aiSuggestions = [
   { cmd: '/stack', label: 'first home buyer', icon: 'stack', key: 'firsthome' },
 ]
 
+export const BOOK_A_CALL_URL = 'https://prospafinancial.com.au/contact-us/'
+
 // Canned example answers — demonstrate "instant answers, calculations,
 // comparisons". Each is illustrative only (the warning banner covers advice).
 export const aiResponses = {
+  book: {
+    paras: [
+      'Absolutely — booking a call with a Prospa adviser takes about 30 seconds.',
+      'You’ll get a free, no-obligation chat to talk through your goals and see how we can help. No jargon, no pressure.',
+    ],
+    bullets: [],
+    cta: '',
+    action: { label: 'Book a Free Call', href: 'https://prospafinancial.com.au/contact-us/' },
+  },
   retirement: {
     paras: [
       'Here’s a quick example. A 45-year-old earning $120,000 with $180,000 in super, employer contributions at 12% and a 6.5% p.a. return could reach roughly $890,000 by age 67.',
@@ -75,6 +87,7 @@ export const aiResponses = {
 // Keyword → response key, for free-typed queries.
 export function matchResponseKey(text) {
   const t = text.toLowerCase()
+  if (/book|call|appointment|meeting|speak|talk to|adviser/.test(t)) return 'book'
   if (/retire|pension|nest egg/.test(t)) return 'retirement'
   if (/super|fund|smsf/.test(t)) return 'super'
   if (/sacrifice|contribut|concessional/.test(t)) return 'sacrifice'

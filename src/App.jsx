@@ -57,7 +57,10 @@ export default function App() {
             <CardsSection />
             <FormsSection />
             <ComponentsSection />
-            <PowerUpSection />
+          </div>
+          {/* Full-bleed AI hero + calculators (renders its own wrap) */}
+          <PowerUpSection />
+          <div className="wrap">
             <IconsSection />
             <LibrarySection />
             <MotionSection />
