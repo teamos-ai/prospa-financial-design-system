@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import BrandMark from './BrandMark.jsx'
 import TeamCarousel from './TeamCarousel.jsx'
 import { navItems } from '../data/tokens.js'
 
@@ -49,7 +48,9 @@ export default function Sidebar({ collapsed, onToggle }) {
     <aside className="sidebar">
       <div className="sidebar-head">
         <div className="brand">
-          <BrandMark />
+          <span className="brand-logo">
+            <img src="/prospa-logo.png" alt="Prospa Financial logo" width="46" height="46" />
+          </span>
           <div className="brand-name">
             <b>PROSPA</b>
             <span>Financial</span>
