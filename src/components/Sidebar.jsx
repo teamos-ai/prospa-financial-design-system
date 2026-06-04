@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import BrandMark from './BrandMark.jsx'
-import TeamMarquee from './TeamMarquee.jsx'
+import TeamCarousel from './TeamCarousel.jsx'
 import { navItems } from '../data/tokens.js'
 
 // Panel / drawer toggle glyph (sidebar with a divider).
@@ -77,7 +77,7 @@ export default function Sidebar({ collapsed, onToggle }) {
         ))}
       </nav>
 
-      <TeamMarquee />
+      <TeamCarousel />
 
       <div className="side-foot">
         Melbourne, Australia

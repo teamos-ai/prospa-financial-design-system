@@ -59,7 +59,7 @@ code,
   background: var(--teal);
   color: #cfe6e3;
   padding: 32px 22px;
-  overflow: hidden auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -156,6 +156,13 @@ code,
   display: flex;
   flex-direction: column;
   gap: 2px;
+  /* Nav scrolls internally on short viewports so the team card below
+     stays pinned and visible rather than dropping off the bottom. */
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 .nav a {
   font-size: 13.5px;
@@ -191,13 +198,13 @@ code,
   line-height: 1.6;
 }
 
-/* ---- Meet the Team — infinite vertical marquee ---- */
+/* ---- Meet the Team — swipe carousel ---- */
 .team {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: none;
+  margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 .team-label {
   flex: none;
@@ -207,92 +214,183 @@ code,
   color: #5fa6a4;
   font-weight: 600;
 }
-.team-viewport {
+.tcarousel {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 130px;
   overflow: hidden;
-  /* Fade the top and bottom edges so cards melt in and out. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  border-radius: 18px;
 }
-.team-track {
+.tcarousel-track {
+  display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  /* Roster is duplicated; -50% lands the 2nd copy exactly on the 1st. */
-  animation: team-scroll 26s linear infinite;
   will-change: transform;
 }
-.team-viewport:hover .team-track {
-  animation-play-state: paused;
+.tcarousel-slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
-.team-card {
+.tcard {
   display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 9px 11px;
-  margin-bottom: 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  flex-direction: column;
+  gap: 9px;
+  background: #f4f8f8;
+  border-radius: 18px;
+  padding: 11px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
-.team-av {
-  width: 38px;
-  height: 38px;
+.tcard-head {
+  padding: 2px 3px 0;
+}
+.tcard-name {
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+}
+.tcard-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--teal);
+}
+.tcard-pulse {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex: none;
-  object-fit: cover;
-  /* Bias the crop toward the top so faces stay framed in head-and-shoulders
-     portraits rather than being cut off at the chin. */
-  object-position: center 20%;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--green);
+  animation: tcard-pulse 2.2s var(--ease) infinite;
 }
-.team-av-initials {
+@keyframes tcard-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(93, 206, 56, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(93, 206, 56, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(93, 206, 56, 0);
+  }
+}
+.tcard-photo {
+  position: relative;
+  border-radius: 13px;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: #e7efef;
+}
+.tcard-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+  display: block;
+}
+.tcard-initials {
   display: flex;
   align-items: center;
   justify-content: center;
   color: #08312f;
   font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.02em;
 }
-.team-meta {
+.tcard-photo .tcard-initials {
+  font-size: 40px;
+}
+.tcard-bio {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--gray);
+  padding: 0 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.tcard-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 1px 3px 2px;
+}
+.tcard-who {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   min-width: 0;
 }
-.team-meta b {
+.tcard-who-av {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 18%;
+  flex: none;
+}
+.tcard-who-av.tcard-initials {
+  font-size: 10px;
+}
+.tcard-who-meta {
+  min-width: 0;
+}
+.tcard-who-meta b {
   display: block;
-  color: #fff;
-  font-size: 13px;
+  font-size: 11.5px;
+  color: var(--ink);
   font-weight: 600;
+  line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.team-meta span {
-  display: block;
-  font-size: 11px;
-  color: #8fc6c2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.tcard-who-meta span {
+  font-size: 10px;
+  color: var(--gray);
 }
-@keyframes team-scroll {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-50%);
-  }
+.tcard-btn {
+  flex: none;
+  background: var(--teal-900);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 8px 13px;
+  border-radius: 9px;
+  white-space: nowrap;
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.tcard-btn:hover {
+  background: var(--teal);
+  transform: translateY(-1px);
+}
+.tcarousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex: none;
+}
+.tdot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.tdot.on {
+  background: var(--green);
+  transform: scale(1.35);
 }
 @media (prefers-reduced-motion: reduce) {
-  .team-track {
-    animation: none !important;
-  }
-  .team-viewport {
-    overflow-y: auto;
+  .tcard-pulse {
+    animation: none;
   }
 }
 

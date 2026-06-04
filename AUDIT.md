@@ -111,3 +111,32 @@ Two findings were surfaced on the first pass and resolved:
 - **Fixed**: accordion height animation (+ clipping bug), Do/Don't side-tab borders.
 - **Accepted with note**: green-on-white as large/decorative only (brand-correct); light-only theming (brand-correct); mobile sidebar (P2 backlog item).
 - **Result**: Impeccable detector **PASS (0)**, Audit **19/20 — Excellent**.
+
+---
+
+## Addendum — Sidebar & full-site correctness sweep
+
+The sidebar now carries three interactive features, all re-audited:
+
+1. **Hero interactive grid** — ~44px cells fire on-brand greens on hover (540 cells verified).
+2. **Drawer collapse toggle** — sidebar collapses 260px → 0 with a floating reopen button (reversible).
+3. **"Meet the Team" swipe carousel** — photo-forward cards (real Prospa team, names/roles/bios from About Us), swipe left one card / 5s, pause on hover **and** keyboard focus, dot navigation, button → `prospafinancial.com.au/about-us` (new tab, `rel="noopener"`).
+
+**Correctness sweep (live browser):**
+
+| Check | Result |
+|---|---|
+| Impeccable anti-pattern detector | **PASS (0)** |
+| Sections / nav links | 11 / 12 — every nav `href` resolves to a real section |
+| Heading hierarchy | single `<h1>`, ordered H2/H3/H4 |
+| Images missing alt (non-decorative) | 0 |
+| External links with `rel="noopener"` | all |
+| Team carousel | 12 slides (11 + clone), 11 dots, 12/12 photos loaded, button href correct |
+| Console errors | none |
+| Production build | clean (57 modules) |
+
+**Fixed during this sweep:**
+- **[P1] Sidebar overflow** — the team card was pushed below the fold on a ~930px viewport (whole sidebar scrolled). Restructured so the **nav scrolls internally** and the team card is **pinned to the bottom**, always visible. Verified `cardFullyVisible: true`.
+- **[P2] Carousel ARIA** — replaced `role="tablist"` + `aria-selected` (no matching `tab` roles) with `role="group"` + `aria-current`; added focus-within pause for WCAG 2.2.2 (pausable auto-moving content).
+
+**Verdict:** site and sidebar are correct, accessible, and detector-clean.
