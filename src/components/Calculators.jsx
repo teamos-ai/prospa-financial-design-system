@@ -6,6 +6,7 @@ import {
   CONCESSIONAL_CAP,
   CONTRIB_TAX,
 } from '../data/powerup.js'
+import { Donut, Legend, Bars, Sparkline, PALETTE } from './charts.jsx'
 
 const fmt = (n) =>
   new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }).format(
@@ -46,11 +47,62 @@ function Field({ label, value, onChange, min, max, step = 1, prefix, suffix, sli
   )
 }
 
-function Stat({ label, value, big }) {
+// Image drop slot — drop a file at public/calc/<k>.jpg and it appears here.
+function ImageSlot({ k }) {
+  const [status, setStatus] = useState('loading')
   return (
-    <div className={'calc-stat' + (big ? ' big' : '')}>
-      <span className="calc-stat-l">{label}</span>
-      <span className="calc-stat-v">{value}</span>
+    <div className={'calc-img' + (status === 'ok' ? ' has-img' : '')}>
+      <img
+        src={`/calc/${k}.jpg`}
+        alt=""
+        aria-hidden="true"
+        onLoad={() => setStatus('ok')}
+        onError={() => setStatus('missing')}
+        style={{ display: status === 'ok' ? 'block' : 'none' }}
+      />
+      {status === 'ok' ? (
+        <span className="calc-img-tag">calc/{k}.jpg</span>
+      ) : (
+        <div className="calc-img-ph">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="3" />
+            <circle cx="8.5" cy="8.5" r="1.6" />
+            <path d="m21 15-5-5L5 21" />
+          </svg>
+          <b>Drop a background image</b>
+          <span>
+            nature · glossy · blurred — <code>public/calc/{k}.jpg</code>
+          </span>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function HeroStat({ label, value, delta, deltaEmber, spark }) {
+  return (
+    <div className="bento-card bento-hero">
+      <div className="hero-top">
+        <span className="hero-label">{label}</span>
+        {delta && <span className={'hero-delta' + (deltaEmber ? ' ember' : '')}>{delta}</span>}
+      </div>
+      <div className="hero-value">{value}</div>
+      {spark && <div className="hero-spark">{spark}</div>}
+    </div>
+  )
+}
+
+function Bento({ imgKey, inputs, hero, donut, bars }) {
+  return (
+    <div className="calc-bento">
+      <div className="bento-card bento-inputs">
+        <div className="bento-h">Your numbers</div>
+        {inputs}
+      </div>
+      {hero}
+      <div className="bento-card bento-donut">{donut}</div>
+      <div className="bento-card bento-bars">{bars}</div>
+      <ImageSlot k={imgKey} />
     </div>
   )
 }
@@ -62,26 +114,64 @@ function CompoundCalc() {
   const [rate, setRate] = useState(6.5)
   const [years, setYears] = useState(20)
 
-  const r = rate / 100 / 12
-  const n = years * 12
-  const fv = r === 0 ? initial + monthly * n : initial * (1 + r) ** n + monthly * (((1 + r) ** n - 1) / r)
-  const contributed = initial + monthly * n
-  const interest = fv - contributed
+  const { fv, contributed, interest, series } = useMemo(() => {
+    const r = rate / 100 / 12
+    let b = initial
+    const s = [b]
+    for (let y = 0; y < years; y++) {
+      for (let m = 0; m < 12; m++) b = b * (1 + r) + monthly
+      s.push(b)
+    }
+    const contrib = initial + monthly * years * 12
+    return { fv: b, contributed: contrib, interest: b - contrib, series: s }
+  }, [initial, monthly, rate, years])
+
+  const segs = [
+    { label: 'Starting', value: initial, color: PALETTE.teal, display: fmt(initial) },
+    { label: 'Contributions', value: monthly * years * 12, color: PALETTE.green, display: fmt(monthly * years * 12) },
+    { label: 'Growth', value: interest, color: PALETTE.ember, display: fmt(interest) },
+  ]
 
   return (
-    <div className="calc-grid">
-      <div className="calc-inputs">
-        <Field label="Starting amount" value={initial} onChange={setInitial} min={0} max={500000} step={1000} prefix="$" />
-        <Field label="Monthly contribution" value={monthly} onChange={setMonthly} min={0} max={5000} step={50} prefix="$" />
-        <Field label="Annual return" value={rate} onChange={setRate} min={0} max={12} step={0.1} suffix="%" />
-        <Field label="Time frame" value={years} onChange={setYears} min={1} max={40} step={1} suffix="yrs" />
-      </div>
-      <div className="calc-results">
-        <Stat label={`Balance after ${years} years`} value={fmt(fv)} big />
-        <Stat label="Total contributed" value={fmt(contributed)} />
-        <Stat label="Investment growth" value={fmt(interest)} />
-      </div>
-    </div>
+    <Bento
+      imgKey="compound"
+      inputs={
+        <>
+          <Field label="Starting amount" value={initial} onChange={setInitial} min={0} max={500000} step={1000} prefix="$" />
+          <Field label="Monthly contribution" value={monthly} onChange={setMonthly} min={0} max={5000} step={50} prefix="$" />
+          <Field label="Annual return" value={rate} onChange={setRate} min={0} max={12} step={0.1} suffix="%" />
+          <Field label="Time frame" value={years} onChange={setYears} min={1} max={40} step={1} suffix="yrs" />
+        </>
+      }
+      hero={
+        <HeroStat
+          label={`Balance after ${years} years`}
+          value={fmt(fv)}
+          delta={`+${Math.round((interest / Math.max(1, contributed)) * 100)}% growth`}
+          spark={<Sparkline points={series} color="#8fe06a" />}
+        />
+      }
+      donut={
+        <>
+          <div className="bento-h">What makes it up</div>
+          <div className="donut-wrap">
+            <Donut segments={segs} label="Balance" value={fmt(fv)} />
+            <Legend items={segs} />
+          </div>
+        </>
+      }
+      bars={
+        <>
+          <div className="bento-h">Contributed vs growth</div>
+          <Bars
+            items={[
+              { label: 'Total contributed', value: contributed, display: fmt(contributed), color: PALETTE.teal },
+              { label: 'Investment growth', value: interest, display: fmt(interest), color: PALETTE.ember },
+            ]}
+          />
+        </>
+      }
+    />
   )
 }
 
@@ -94,40 +184,72 @@ function SuperCalc() {
   const [extra, setExtra] = useState(0)
   const [rate, setRate] = useState(6.5)
 
-  const { projected, netContrib, employer, overCap } = useMemo(() => {
+  const { projected, employer, netContrib, growth, series, overCap } = useMemo(() => {
     const years = Math.max(0, retire - age)
     const r = rate / 100
     const employerYr = salary * SUPER_GUARANTEE
     const concessional = employerYr + extra
     const netYr = concessional * (1 - CONTRIB_TAX)
     let b = balance
+    const s = [b]
     let totalNet = 0
     for (let y = 0; y < years; y++) {
       b = b * (1 + r) + netYr
       totalNet += netYr
+      s.push(b)
     }
-    return { projected: b, netContrib: totalNet, employer: employerYr, overCap: concessional > CONCESSIONAL_CAP }
+    return { projected: b, employer: employerYr, netContrib: totalNet, growth: b - balance - totalNet, series: s, overCap: concessional > CONCESSIONAL_CAP }
   }, [age, retire, balance, salary, extra, rate])
 
+  const segs = [
+    { label: 'Today’s balance', value: balance, color: PALETTE.teal, display: fmt(balance) },
+    { label: 'Net contributions', value: netContrib, color: PALETTE.green, display: fmt(netContrib) },
+    { label: 'Investment growth', value: growth, color: PALETTE.ember, display: fmt(growth) },
+  ]
+
   return (
-    <div className="calc-grid">
-      <div className="calc-inputs">
-        <Field label="Current age" value={age} onChange={setAge} min={18} max={70} step={1} suffix="yrs" />
-        <Field label="Retirement age" value={retire} onChange={setRetire} min={55} max={75} step={1} suffix="yrs" />
-        <Field label="Current super balance" value={balance} onChange={setBalance} min={0} max={2000000} step={5000} prefix="$" />
-        <Field label="Annual salary (before tax)" value={salary} onChange={setSalary} min={20000} max={400000} step={5000} prefix="$" />
-        <Field label="Extra contributions / yr" value={extra} onChange={setExtra} min={0} max={30000} step={500} prefix="$" />
-        <Field label="Annual return" value={rate} onChange={setRate} min={0} max={11} step={0.1} suffix="%" />
-      </div>
-      <div className="calc-results">
-        <Stat label={`Projected balance at ${retire}`} value={fmt(projected)} big />
-        <Stat label={`Employer (SG ${pct(SUPER_GUARANTEE)})`} value={`${fmt(employer)}/yr`} />
-        <Stat label="Net contributions (after 15% tax)" value={fmt(netContrib)} />
-        {overCap && (
-          <p className="calc-warn">Heads up: employer + extra contributions exceed the {fmt(CONCESSIONAL_CAP)} concessional cap for 2025–26.</p>
-        )}
-      </div>
-    </div>
+    <Bento
+      imgKey="super"
+      inputs={
+        <>
+          <Field label="Current age" value={age} onChange={setAge} min={18} max={70} step={1} suffix="yrs" />
+          <Field label="Retirement age" value={retire} onChange={setRetire} min={55} max={75} step={1} suffix="yrs" />
+          <Field label="Current super balance" value={balance} onChange={setBalance} min={0} max={2000000} step={5000} prefix="$" />
+          <Field label="Annual salary (before tax)" value={salary} onChange={setSalary} min={20000} max={400000} step={5000} prefix="$" />
+          <Field label="Extra contributions / yr" value={extra} onChange={setExtra} min={0} max={30000} step={500} prefix="$" />
+          <Field label="Annual return" value={rate} onChange={setRate} min={0} max={11} step={0.1} suffix="%" />
+        </>
+      }
+      hero={
+        <HeroStat
+          label={`Projected balance at ${retire}`}
+          value={fmt(projected)}
+          delta={`SG ${pct(SUPER_GUARANTEE)} included`}
+          spark={<Sparkline points={series} color="#8fe06a" />}
+        />
+      }
+      donut={
+        <>
+          <div className="bento-h">How it builds</div>
+          <div className="donut-wrap">
+            <Donut segments={segs} label={`At ${retire}`} value={fmt(projected)} />
+            <Legend items={segs} />
+          </div>
+        </>
+      }
+      bars={
+        <>
+          <div className="bento-h">Yearly contributions</div>
+          <Bars
+            items={[
+              { label: `Employer (SG ${pct(SUPER_GUARANTEE)})`, value: employer, display: `${fmt(employer)}/yr`, color: PALETTE.teal },
+              { label: 'Your extra', value: extra, display: `${fmt(extra)}/yr`, color: PALETTE.ember },
+            ]}
+          />
+          {overCap && <p className="calc-warn">Over the {fmt(CONCESSIONAL_CAP)} concessional cap for 2025–26.</p>}
+        </>
+      }
+    />
   )
 }
 
@@ -150,29 +272,74 @@ function MortgageCalc() {
   const totalRepaid = repay * n
   const totalInterest = totalRepaid - loan
 
+  // Remaining-balance paydown curve (yearly).
+  const series = useMemo(() => {
+    const mi = rate / 100 / 12
+    const mn = term * 12
+    const mRepay = mi === 0 ? loan / mn : (loan * mi) / (1 - (1 + mi) ** -mn)
+    let bal = loan
+    const s = [bal]
+    for (let y = 0; y < term; y++) {
+      for (let m = 0; m < 12; m++) bal = Math.max(0, bal + bal * mi - mRepay)
+      s.push(bal)
+    }
+    return s
+  }, [loan, rate, term])
+
+  const segs = [
+    { label: 'Principal', value: loan, color: PALETTE.teal, display: fmt(loan) },
+    { label: 'Interest', value: totalInterest, color: PALETTE.ember, display: fmt(totalInterest) },
+  ]
+
   return (
-    <div className="calc-grid">
-      <div className="calc-inputs">
-        <Field label="Loan amount" value={loan} onChange={setLoan} min={50000} max={2000000} step={10000} prefix="$" />
-        <Field label="Interest rate" value={rate} onChange={setRate} min={1} max={12} step={0.05} suffix="%" />
-        <Field label="Loan term" value={term} onChange={setTerm} min={1} max={30} step={1} suffix="yrs" />
-        <div className="calc-field">
-          <label>Repayment frequency</label>
-          <div className="calc-seg">
-            {FREQS.map((f) => (
-              <button key={f.key} type="button" className={'calc-seg-btn' + (freq === f.key ? ' on' : '')} onClick={() => setFreq(f.key)}>
-                {f.label}
-              </button>
-            ))}
+    <Bento
+      imgKey="mortgage"
+      inputs={
+        <>
+          <Field label="Loan amount" value={loan} onChange={setLoan} min={50000} max={2000000} step={10000} prefix="$" />
+          <Field label="Interest rate" value={rate} onChange={setRate} min={1} max={12} step={0.05} suffix="%" />
+          <Field label="Loan term" value={term} onChange={setTerm} min={1} max={30} step={1} suffix="yrs" />
+          <div className="calc-field">
+            <label>Repayment frequency</label>
+            <div className="calc-seg">
+              {FREQS.map((f) => (
+                <button key={f.key} type="button" className={'calc-seg-btn' + (freq === f.key ? ' on' : '')} onClick={() => setFreq(f.key)}>
+                  {f.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="calc-results">
-        <Stat label={`${FREQS.find((f) => f.key === freq).label} repayment`} value={fmt(repay)} big />
-        <Stat label="Total interest" value={fmt(totalInterest)} />
-        <Stat label="Total repaid" value={fmt(totalRepaid)} />
-      </div>
-    </div>
+        </>
+      }
+      hero={
+        <HeroStat
+          label={`${FREQS.find((f) => f.key === freq).label} repayment`}
+          value={fmt(repay)}
+          delta={`over ${term} years`}
+          spark={<Sparkline points={series} color="#8fe06a" />}
+        />
+      }
+      donut={
+        <>
+          <div className="bento-h">Principal vs interest</div>
+          <div className="donut-wrap">
+            <Donut segments={segs} label="Total repaid" value={fmt(totalRepaid)} />
+            <Legend items={segs} />
+          </div>
+        </>
+      }
+      bars={
+        <>
+          <div className="bento-h">Cost of the loan</div>
+          <Bars
+            items={[
+              { label: 'Principal', value: loan, display: fmt(loan), color: PALETTE.teal },
+              { label: 'Total interest', value: totalInterest, display: fmt(totalInterest), color: PALETTE.ember },
+            ]}
+          />
+        </>
+      }
+    />
   )
 }
 
@@ -210,23 +377,55 @@ function TaxCalc() {
   const takeHome = income - totalTax
   const eff = income > 0 ? totalTax / income : 0
 
+  const segs = [
+    { label: 'Take-home', value: takeHome, color: PALETTE.green, display: fmt(takeHome) },
+    { label: 'Income tax', value: tax - offset, color: PALETTE.teal, display: fmt(tax - offset) },
+    { label: 'Medicare levy', value: levy, color: PALETTE.ember, display: fmt(levy) },
+  ]
+
   return (
-    <div className="calc-grid">
-      <div className="calc-inputs">
-        <Field label="Taxable income (per year)" value={income} onChange={setIncome} min={0} max={400000} step={1000} prefix="$" />
-        <div className="calc-breakdown">
-          <Stat label="Income tax" value={`− ${fmt(tax)}`} />
-          <Stat label="Low income offset (LITO)" value={`+ ${fmt(offset)}`} />
-          <Stat label={`Medicare levy (${pct(MEDICARE_LEVY)})`} value={`− ${fmt(levy)}`} />
-        </div>
-      </div>
-      <div className="calc-results">
-        <Stat label="Take-home pay" value={fmt(takeHome)} big />
-        <Stat label="Monthly take-home" value={`${fmt(takeHome / 12)}/mo`} />
-        <Stat label="Total tax" value={fmt(totalTax)} />
-        <Stat label="Effective tax rate" value={pct(eff)} />
-      </div>
-    </div>
+    <Bento
+      imgKey="tax"
+      inputs={
+        <>
+          <Field label="Taxable income (per year)" value={income} onChange={setIncome} min={0} max={400000} step={1000} prefix="$" />
+          <div className="calc-mini">
+            <div className="calc-mini-row">
+              <span>Monthly take-home</span>
+              <b>{fmt(takeHome / 12)}</b>
+            </div>
+            <div className="calc-mini-row">
+              <span>Effective tax rate</span>
+              <b>{pct(eff)}</b>
+            </div>
+          </div>
+        </>
+      }
+      hero={
+        <HeroStat label="Take-home pay" value={fmt(takeHome)} delta={`${pct(eff)} effective rate`} deltaEmber />
+      }
+      donut={
+        <>
+          <div className="bento-h">Where your income goes</div>
+          <div className="donut-wrap">
+            <Donut segments={segs} label="Income" value={fmt(income)} />
+            <Legend items={segs} />
+          </div>
+        </>
+      }
+      bars={
+        <>
+          <div className="bento-h">Tax breakdown</div>
+          <Bars
+            items={[
+              { label: 'Income tax', value: tax, display: fmt(tax), color: PALETTE.teal },
+              { label: 'Medicare levy', value: levy, display: fmt(levy), color: PALETTE.ember },
+              { label: 'Low income offset', value: offset, display: `+ ${fmt(offset)}`, color: PALETTE.green },
+            ]}
+          />
+        </>
+      }
+    />
   )
 }
 
@@ -257,9 +456,7 @@ export default function Calculators() {
           </button>
         ))}
       </div>
-      <div className="calc-panel" role="tabpanel">
-        <Active />
-      </div>
+      <Active />
       <p className="calc-disclaimer">
         Estimates only, for illustration. Figures use 2025–26 Australian rates and don’t account for
         every personal circumstance. General advice only — speak with a Prospa adviser before acting.

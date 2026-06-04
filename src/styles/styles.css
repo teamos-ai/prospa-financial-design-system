@@ -613,6 +613,44 @@ section:last-of-type {
   background: rgba(0, 0, 0, 0.35);
   color: #fff;
 }
+/* Suggested accent (ember) — presented gently as an optional add-on */
+.accent-suggest {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 18px;
+  align-items: stretch;
+}
+.accent-suggest-note {
+  background: var(--ember-soft);
+  border: 1px solid #f1ddca;
+  border-radius: var(--r-md);
+  padding: 22px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  justify-content: center;
+}
+.accent-suggest-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ember-strong);
+}
+.accent-suggest-note p {
+  font-size: 14px;
+  color: var(--slate);
+  line-height: 1.65;
+}
+.accent-suggest-note strong {
+  color: var(--ember-strong);
+  font-weight: 600;
+}
+@media (max-width: 760px) {
+  .accent-suggest {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ============ TYPE ============ */
 .type-spec {
@@ -1634,22 +1672,47 @@ section:last-of-type {
   color: #fff;
   border-color: var(--teal);
 }
-.calc-panel {
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  background: var(--bg2);
-  padding: 28px;
-}
-.calc-grid {
+/* Bento grid — tall inputs column + visual result cards */
+.calc-bento {
   display: grid;
-  grid-template-columns: 1fr 330px;
-  gap: 28px;
-  align-items: start;
+  gap: 14px;
+  grid-template-columns: 270px 1fr 1fr;
+  grid-template-areas:
+    'inputs hero hero'
+    'inputs donut bars'
+    'inputs image image';
+  margin-top: 4px;
 }
-.calc-inputs {
+.bento-card {
+  background: #fff;
+  border: 1px solid #eef3f3;
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-shadow: var(--sh-card);
+  min-width: 0;
+}
+.bento-h {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 14px;
+}
+.bento-inputs {
+  grid-area: inputs;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 13px;
+}
+.bento-inputs .bento-h {
+  margin-bottom: 2px;
+}
+.bento-donut {
+  grid-area: donut;
+}
+.bento-bars {
+  grid-area: bars;
 }
 .calc-field {
   display: flex;
@@ -1749,61 +1812,241 @@ section:last-of-type {
   background: var(--teal);
   color: #fff;
 }
-.calc-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 4px;
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
-}
-.calc-results {
-  background: radial-gradient(120% 120% at 85% 0%, #1a7079 0%, var(--teal) 45%, var(--teal-900) 100%);
-  border-radius: var(--r-md);
-  padding: 26px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+/* Hero stat card (teal) */
+.bento-hero {
+  grid-area: hero;
+  background: radial-gradient(120% 150% at 85% 0%, #1a7079 0%, var(--teal) 45%, var(--teal-900) 100%);
+  border: none;
   color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-.calc-stat {
+.hero-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
 }
-.calc-stat-l {
+.hero-label {
   font-size: 13px;
-  color: #a9d6d2;
+  color: #bfe0dd;
 }
-.calc-stat-v {
-  font-size: 15px;
+.hero-delta {
+  font-size: 11px;
   font-weight: 600;
+  color: #0a363c;
+  background: var(--green);
+  padding: 3px 11px;
+  border-radius: var(--r-pill);
+  white-space: nowrap;
+}
+.hero-delta.ember {
+  background: var(--ember);
+  color: #fff;
+}
+.hero-value {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-top: 8px;
   color: #fff;
   font-variant-numeric: tabular-nums;
 }
-.calc-stat.big {
+.hero-spark {
+  margin-top: 14px;
+  height: 54px;
+}
+.spark {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Donut + legend */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.donut {
+  position: relative;
+  flex: none;
+}
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
   flex-direction: column;
-  gap: 3px;
-  align-items: flex-start;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
-.calc-stat.big .calc-stat-l {
-  font-size: 12.5px;
-  color: #bfe0dd;
-}
-.calc-stat.big .calc-stat-v {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #fff;
-}
-.calc-breakdown .calc-stat-l {
+.donut-center span {
+  font-size: 10px;
   color: var(--gray);
 }
-.calc-breakdown .calc-stat-v {
+.donut-center b {
+  font-size: 15px;
+  font-weight: 700;
   color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 120px;
+  min-width: 0;
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--slate);
+}
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  flex: none;
+}
+.legend-l {
+  flex: 1 1 auto;
+  white-space: nowrap;
+}
+.legend li b {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bars */
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+.bar-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.bar-l {
+  color: var(--slate);
+}
+.bar-v {
+  color: var(--ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.bar-track {
+  height: 9px;
+  border-radius: 6px;
+  background: var(--bg2);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  min-width: 4px;
+}
+
+.calc-mini {
+  margin-top: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.calc-mini-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+.calc-mini-row b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Image drop slot */
+.calc-img {
+  grid-area: image;
+  position: relative;
+  overflow: hidden;
+  min-height: 132px;
+  display: flex;
+}
+.calc-img.has-img {
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+}
+.calc-img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.calc-img.has-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.16), transparent 42%),
+    linear-gradient(to top, rgba(10, 54, 60, 0.3), transparent 55%);
+  pointer-events: none;
+}
+.calc-img-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  z-index: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(10, 54, 60, 0.5);
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+.calc-img-ph {
+  flex: 1;
+  border: 2px dashed #cddedd;
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  text-align: center;
+  color: var(--gray);
+  padding: 18px;
+  background: var(--bg2);
+}
+.calc-img-ph svg {
+  color: var(--teal);
+}
+.calc-img-ph b {
+  color: var(--slate);
+  font-size: 13px;
+}
+.calc-img-ph span {
+  font-size: 11px;
+}
+.calc-img-ph code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ember-strong);
+  background: var(--ember-soft);
+  padding: 1px 6px;
+  border-radius: 5px;
 }
 .calc-warn {
   font-size: 12px;
@@ -1818,10 +2061,13 @@ section:last-of-type {
   max-width: 680px;
 }
 
-@media (max-width: 760px) {
-  .calc-grid {
+@media (max-width: 880px) {
+  .calc-bento {
     grid-template-columns: 1fr;
+    grid-template-areas: 'inputs' 'hero' 'donut' 'bars' 'image';
   }
+}
+@media (max-width: 760px) {
   .ai-demo {
     padding: 64px 20px;
   }

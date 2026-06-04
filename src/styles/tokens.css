@@ -12,6 +12,11 @@
   --green-600: #4eb52d;
   --accent: #d0dfe1;
 
+  /* Suggested warm accent — used sparingly to harmonise the cool palette */
+  --ember: #c65a1e;
+  --ember-strong: #a8481a;
+  --ember-soft: #f9ece2;
+
   /* Backgrounds */
   --bg0: #ffffff;
   --bg1: #f2fbef;

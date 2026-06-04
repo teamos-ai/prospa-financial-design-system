@@ -61,6 +61,34 @@ export default function ColorSection() {
           <span className="tok">linear-gradient(90deg, #5dce38 0%, #fff 100%)</span>
         </div>
       </div>
+
+      <div className="sub-h">Suggested Accent</div>
+      <div className="accent-suggest">
+        <button
+          type="button"
+          className="swatch dark"
+          onClick={() => copy('#C65A1E')}
+          style={{ textAlign: 'left', font: 'inherit', padding: 0 }}
+        >
+          <div className="chip" style={{ background: '#c65a1e' }}>
+            <span className="copy">Copy</span>
+          </div>
+          <div className="meta">
+            <b>Ember — Burnt Orange</b>
+            <div className="hex">#C65A1E</div>
+          </div>
+        </button>
+        <div className="accent-suggest-note">
+          <div className="accent-suggest-tag">Our suggestion · optional add-on</div>
+          <p>
+            A single warm accent to gently off-balance and harmonise the cool teal-and-green system.
+            Use it <strong>sparingly</strong> — one key figure, a chart segment, a small icon — to add
+            warmth and draw the eye, without competing with the two brand colours. It isn’t a core
+            brand colour; think of it as seasoning. You’ll see it applied lightly across the
+            calculator visuals in the Power-Up section.
+          </p>
+        </div>
+      </div>
     </section>
   )
 }
