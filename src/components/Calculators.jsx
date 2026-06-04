@@ -429,9 +429,132 @@ function TaxCalc() {
   )
 }
 
+// 5) Retirement needs ---------------------------------------------------------
+const PLAN_TO_AGE = 90 // draw the plan down to this age
+const RET_INFLATION = 0.025 // assumed long-run inflation (today's-dollar view)
+function RetirementCalc() {
+  const [age, setAge] = useState(40)
+  const [retire, setRetire] = useState(67)
+  const [income, setIncome] = useState(70000)
+  const [balance, setBalance] = useState(200000)
+  const [contrib, setContrib] = useState(15000)
+  const [rate, setRate] = useState(6.5)
+
+  const {
+    projected,
+    needed,
+    gap,
+    onTrack,
+    coverage,
+    sustainable,
+    yearsToRetire,
+    retirementYears,
+    contributed,
+    growth,
+    series,
+  } = useMemo(() => {
+    // Work in today's dollars: use a real return so the desired income and the
+    // projected balance are directly comparable.
+    const rr = (1 + rate / 100) / (1 + RET_INFLATION) - 1
+    const yToR = Math.max(0, retire - age)
+    const rYears = Math.max(1, PLAN_TO_AGE - retire)
+    let b = balance
+    const s = [b]
+    for (let y = 0; y < yToR; y++) {
+      b = b * (1 + rr) + contrib
+      s.push(b)
+    }
+    // Capital needed = present value (at retirement) of the desired income drawn
+    // down over the retirement years, earning the real return.
+    const annuity = rr === 0 ? rYears : (1 - (1 + rr) ** -rYears) / rr
+    const need = income * annuity
+    const contribTotal = contrib * yToR
+    return {
+      projected: b,
+      needed: need,
+      gap: b - need,
+      onTrack: b >= need,
+      coverage: need > 0 ? b / need : 1,
+      sustainable: annuity > 0 ? b / annuity : 0,
+      yearsToRetire: yToR,
+      retirementYears: rYears,
+      contributed: contribTotal,
+      growth: Math.max(0, b - balance - contribTotal),
+      series: s,
+    }
+  }, [age, retire, income, balance, contrib, rate])
+
+  const segs = [
+    { label: 'Today’s savings', value: balance, color: PALETTE.teal, display: fmt(balance) },
+    { label: 'Future contributions', value: contributed, color: PALETTE.green, display: fmt(contributed) },
+    { label: 'Investment growth', value: growth, color: PALETTE.ember, display: fmt(growth) },
+  ]
+
+  return (
+    <Bento
+      imgKey="retirement"
+      inputs={
+        <>
+          <Field label="Current age" value={age} onChange={setAge} min={18} max={70} step={1} suffix="yrs" />
+          <Field label="Retirement age" value={retire} onChange={setRetire} min={55} max={75} step={1} suffix="yrs" />
+          <Field label="Desired income / yr (today’s $)" value={income} onChange={setIncome} min={20000} max={200000} step={1000} prefix="$" />
+          <Field label="Current savings & super" value={balance} onChange={setBalance} min={0} max={3000000} step={5000} prefix="$" />
+          <Field label="Annual contributions (incl. super)" value={contrib} onChange={setContrib} min={0} max={100000} step={500} prefix="$" />
+          <Field label="Annual return" value={rate} onChange={setRate} min={0} max={11} step={0.1} suffix="%" />
+          <div className="calc-mini">
+            <div className="calc-mini-row">
+              <span>Years until retirement</span>
+              <b>{yearsToRetire} yrs · {retirementYears} in retirement</b>
+            </div>
+            <div className="calc-mini-row">
+              <span>Income it could fund</span>
+              <b>{fmt(sustainable)}/yr</b>
+            </div>
+          </div>
+        </>
+      }
+      hero={
+        <HeroStat
+          label={`Projected at ${retire} (today’s $)`}
+          value={fmt(projected)}
+          delta={onTrack ? 'On track' : `Short ${fmt(-gap)}`}
+          deltaEmber={!onTrack}
+          spark={<Sparkline points={series} color="#8fe06a" />}
+        />
+      }
+      donut={
+        <>
+          <div className="bento-h">What builds your nest egg</div>
+          <div className="donut-wrap">
+            <Donut segments={segs} label="Projected" value={fmt(projected)} />
+            <Legend items={segs} />
+          </div>
+        </>
+      }
+      bars={
+        <>
+          <div className="bento-h">Projected vs target</div>
+          <Bars
+            items={[
+              { label: 'Projected balance', value: projected, display: fmt(projected), color: PALETTE.green },
+              { label: 'Target needed', value: needed, display: fmt(needed), color: PALETTE.teal },
+            ]}
+          />
+          <p className={'calc-warn' + (onTrack ? ' ok' : '')}>
+            {onTrack
+              ? `On track — projected to cover about ${Math.round(coverage * 100)}% of your target, a surplus of ${fmt(gap)}.`
+              : `Projected to cover about ${Math.round(coverage * 100)}% of your target — a shortfall of ${fmt(-gap)}. Lifting contributions or retiring a little later can close the gap.`}
+          </p>
+        </>
+      }
+    />
+  )
+}
+
 const TABS = [
   { key: 'compound', label: 'Compound Growth', el: CompoundCalc },
   { key: 'super', label: 'Superannuation', el: SuperCalc },
+  { key: 'retirement', label: 'Retirement Needs', el: RetirementCalc },
   { key: 'mortgage', label: 'Mortgage', el: MortgageCalc },
   { key: 'tax', label: 'Income Tax', el: TaxCalc },
 ]

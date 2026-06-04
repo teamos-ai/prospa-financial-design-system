@@ -2097,8 +2097,13 @@ section:last-of-type {
 }
 .calc-warn {
   font-size: 12px;
-  color: #ffe2b8;
+  color: var(--ember-strong);
+  font-weight: 600;
   line-height: 1.5;
+  margin-top: 12px;
+}
+.calc-warn.ok {
+  color: var(--green-600);
 }
 .calc-disclaimer {
   font-size: 12px;
