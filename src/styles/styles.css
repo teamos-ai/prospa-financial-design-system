@@ -65,7 +65,18 @@ code,
   top: 0;
   align-self: start;
   height: 100vh;
-  background: var(--teal);
+  /* Frosted "gaussian" glass panel — a translucent teal gradient over a
+     gaussian backdrop blur, with an inner highlight and a soft edge shadow. */
+  background: linear-gradient(
+    180deg,
+    rgba(26, 112, 121, 0.78) 0%,
+    rgba(15, 76, 84, 0.82) 55%,
+    rgba(10, 54, 60, 0.86) 100%
+  );
+  -webkit-backdrop-filter: blur(22px) saturate(135%);
+  backdrop-filter: blur(22px) saturate(135%);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.07), 14px 0 44px rgba(10, 54, 60, 0.16);
   color: #cfe6e3;
   padding: 18px 18px 20px;
   overflow: hidden;
@@ -522,7 +533,7 @@ section:last-of-type {
 }
 .hero h1 em {
   font-style: normal;
-  color: var(--teal);
+  color: var(--green);
 }
 .hero .lede {
   color: var(--gray);
@@ -1448,7 +1459,7 @@ section:last-of-type {
 }
 .ai-bar {
   width: 100%;
-  max-width: 1240px;
+  max-width: 960px;
   margin: 0 auto;
   background: #fff;
   border: 1px solid var(--line);
@@ -1643,7 +1654,7 @@ section:last-of-type {
   justify-content: center;
   gap: 10px;
   width: 100%;
-  max-width: 1080px;
+  max-width: 960px;
   margin: 52px auto 0;
 }
 .ai-chip {
