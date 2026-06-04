@@ -1725,7 +1725,7 @@ section:last-of-type {
   /* Square off the whole calculator inside one framed tray; tiles sit close
      together with small gutters (gallery-frame look). */
   padding: 12px;
-  background: #f3f8f7;
+  background: var(--bg2);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   box-shadow: var(--sh-card);
@@ -1781,7 +1781,7 @@ section:last-of-type {
   font-size: 15px;
   color: var(--ink);
   border: 1.5px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--r-sm);
   padding: 11px 14px;
   background: #fff;
   width: 100%;
@@ -1839,7 +1839,7 @@ section:last-of-type {
   display: inline-flex;
   background: #fff;
   border: 1.5px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--r-sm);
   padding: 3px;
   gap: 2px;
 }

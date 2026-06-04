@@ -106,6 +106,55 @@ Two findings were surfaced on the first pass and resolved:
 
 ---
 
+## Calculator Bento Audit — **PASS**
+
+Scope: all six calculators in the Power-Up section (`Calculators.jsx`, `charts.jsx`,
+`.calc-*`/`.bento-*` styles). Three lenses: **accuracy**, **token system**, **design**.
+
+### 1. Accuracy — verified numerically (2025–26 AU rates)
+
+| Calculator | Default inputs | Output | Check |
+|---|---|---|---|
+| Compound Growth | $20k + $500/mo, 6.5%, 20y | FV **$318,339** (growth $178,339) | ✓ monthly compounding |
+| Budget & Cash Flow | $7,000 income, $5,600 exp | Surplus **$1,400/mo** (20%), capacity **~$139k** | ✓ PV of 80% surplus @ 30y |
+| Superannuation | 40→67, $150k, $110k salary | Projected **$1,593,929** | ✓ SG 12%, 15% contrib tax, $30k cap |
+| Retirement Needs | 40→67, $70k income, $200k | Projected **$1.26M** vs need **$1.05M** = 120% | ✓ real-return drawdown to 90 |
+| Mortgage | $650k, 6.1%, 30y | **$3,939/mo** (interest $768k) | ✓ amortisation |
+| Income Tax | $95,000 | Take-home **$73,812** (22.3%) | ✓ brackets 16/30/37/45, Medicare 2%, LITO |
+
+LITO taper ($700→$325→$0 across $37.5k/$45k/$66,667) and Medicare low-income
+phase-in ($27,222→$34,027 @ 10c/$1) confirmed correct. Deficits in the budget tool
+are sign-formatted explicitly (the shared `fmt()` clamps negatives to $0).
+
+### 2. Token system — tightened
+
+- Colour: charts read from a single `PALETTE` (brand teal/green + ember); chart hexes
+  are deliberately literal (SVG `fill`/`stroke` can't take CSS vars cleanly) but mirror
+  the brand tokens. Calculator CSS otherwise uses `--teal/--ink/--gray/--slate/--line/--accent`.
+- **Fixes applied:** the bento tray background was a one-off `#f3f8f7` → now the existing
+  `--bg2`; two hardcoded `border-radius: 10px` (`.calc-input input`, `.calc-seg`) →
+  `--r-sm`. Zero visual change, full token discipline. Radii all tokenised
+  (`--r-sm` tiles, `--r-md` tray, `--r-pill` badge).
+
+### 3. Design — consistent
+
+- All six share the `Bento` layout (inputs · teal hero stat · donut · bars · image),
+  framed in one tray with 9px gutters and squared `--r-sm` tiles.
+- Colour semantics hold across calculators: **green** = positive outcome
+  (take-home / surplus / on-track), **ember** = cost or accent (interest / tax / growth /
+  shortfall), **teal** = base/principal. Hero badge is green by default, ember when adverse.
+- Per-calculator background images now wired (`public/calc/*.jpg`), themed to each tool
+  (growth sprouts, dewy grass, open horizon, golden hour, fence/structure, dappled light)
+  with the teal gloss overlay; decorative `alt=""` + `aria-hidden`.
+- Detector: **PASS (0)** after changes.
+
+**Minor, non-blocking:** the budget donut uses three teal shades alongside green+ember —
+distinguishable via the labelled legend, but the lightest split is the chart's tightest
+contrast. Number inputs carry a uniform 26px left indent even without a `$` prefix
+(consistent, intentional-looking).
+
+---
+
 ## Disposition
 
 - **Fixed**: accordion height animation (+ clipping bug), Do/Don't side-tab borders.
