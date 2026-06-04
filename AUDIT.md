@@ -140,3 +140,7 @@ The sidebar now carries three interactive features, all re-audited:
 - **[P2] Carousel ARIA** — replaced `role="tablist"` + `aria-selected` (no matching `tab` roles) with `role="group"` + `aria-current`; added focus-within pause for WCAG 2.2.2 (pausable auto-moving content).
 
 **Verdict:** site and sidebar are correct, accessible, and detector-clean.
+
+### Follow-up — collapsed sidebar sliver
+
+**[P1] Fixed:** when collapsed, a **40px teal sliver** of the sidebar stayed visible (and stuck while scrolling). Cause: the grid track collapsed to `0`, but with `box-sizing: border-box` an element cannot shrink below its own horizontal padding (`20px + 20px = 40px`), so the panel floored at 40px. Fix: `.app.nav-collapsed .sidebar` zeroes the horizontal padding (and border), letting the panel reach true `width: 0`. The grid-column transition still drives a smooth width animation (no layout-property transition — the earlier `transition: padding` was removed after the detector flagged it). Verified: collapsed `width: 0`, `rightEdge: 0`, hidden at all scroll positions; expand restores `260px`. Detector **PASS (0)**.

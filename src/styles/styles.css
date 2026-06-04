@@ -51,6 +51,15 @@ code,
 .app.nav-collapsed {
   grid-template-columns: 0 1fr;
 }
+/* Zero the sidebar's own padding when collapsed — with box-sizing:border-box
+   an element can't shrink below its horizontal padding, so without this a
+   ~40px teal sliver would stay visible (and sticky) once the grid track hits
+   0. Clipping the content too guarantees nothing peeks through. */
+.app.nav-collapsed .sidebar {
+  padding-left: 0;
+  padding-right: 0;
+  border-right: 0;
+}
 .sidebar {
   position: sticky;
   top: 0;
