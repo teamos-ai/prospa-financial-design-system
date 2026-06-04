@@ -58,11 +58,11 @@ code,
   height: 100vh;
   background: var(--teal);
   color: #cfe6e3;
-  padding: 32px 22px;
+  padding: 20px 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 12px;
   min-width: 0;
 }
 .sidebar-head {
@@ -155,19 +155,13 @@ code,
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  /* Nav scrolls internally on short viewports so the team card below
-     stays pinned and visible rather than dropping off the bottom. */
-  flex: 0 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  gap: 1px;
+  flex: none;
 }
 .nav a {
-  font-size: 13.5px;
+  font-size: 12.5px;
   color: #b6d6d2;
-  padding: 8px 12px;
+  padding: 4px 12px;
   border-radius: 9px;
   font-weight: 500;
   transition: all 0.2s var(--ease);
@@ -191,20 +185,13 @@ code,
   background: currentColor;
   opacity: 0.55;
 }
-.side-foot {
-  flex: none;
-  font-size: 11px;
-  color: #56999a;
-  line-height: 1.6;
-}
-
 /* ---- Meet the Team — swipe carousel ---- */
 .team {
   flex: none;
-  margin-top: auto;
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .team-label {
   flex: none;
@@ -233,10 +220,10 @@ code,
 .tcard {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 7px;
   background: #f4f8f8;
   border-radius: 18px;
-  padding: 11px;
+  padding: 10px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 .tcard-head {
@@ -281,7 +268,7 @@ code,
   position: relative;
   border-radius: 13px;
   overflow: hidden;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 10;
   background: #e7efef;
 }
 .tcard-img {
@@ -322,19 +309,20 @@ code,
 .tcard-who {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  flex: 1 1 auto;
   min-width: 0;
 }
 .tcard-who-av {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center 18%;
   flex: none;
 }
 .tcard-who-av.tcard-initials {
-  font-size: 10px;
+  font-size: 9px;
 }
 .tcard-who-meta {
   min-width: 0;
@@ -344,22 +332,27 @@ code,
   font-size: 11.5px;
   color: var(--ink);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .tcard-who-meta span {
-  font-size: 10px;
+  display: block;
+  font-size: 9.5px;
   color: var(--gray);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tcard-btn {
   flex: none;
   background: var(--teal-900);
   color: #fff;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
-  padding: 8px 13px;
+  padding: 7px 11px;
   border-radius: 9px;
   white-space: nowrap;
   transition: background 0.2s var(--ease), transform 0.2s var(--ease);

@@ -47,7 +47,6 @@ function TeamCard({ member }) {
 
       <footer className="tcard-foot">
         <div className="tcard-who">
-          <Avatar member={member} className="tcard-who-av" />
           <div className="tcard-who-meta">
             <b>{handle(member.name)}</b>
             <span>Prospa Financial</span>

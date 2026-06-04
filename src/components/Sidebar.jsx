@@ -78,14 +78,6 @@ export default function Sidebar({ collapsed, onToggle }) {
       </nav>
 
       <TeamCarousel />
-
-      <div className="side-foot">
-        Melbourne, Australia
-        <br />
-        Financial advisory
-        <br />
-        Est. legacy of 40+ years
-      </div>
     </aside>
   )
 }
