@@ -68,8 +68,28 @@ export default function App() {
           </div>
           <footer className="footer">
             <div className="wrap">
-              <div>Prospa Financial — Design System v1.0</div>
-              <div>Poppins · #135F69 · #5DCE38 · Melbourne, Australia</div>
+              <div className="footer-col">
+                <a
+                  className="footer-link"
+                  href="https://prospafinancial.com.au/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Prospa Financial
+                </a>
+                <span className="footer-sub">Design System v1.0 · Poppins · #135F69 · #5DCE38 · Melbourne, Australia</span>
+              </div>
+              <div className="footer-col footer-credit">
+                <span className="footer-sub">Designed &amp; built by</span>
+                <a
+                  className="footer-link"
+                  href="https://www.oscale.ai/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Team OS
+                </a>
+              </div>
             </div>
           </footer>
         </main>

@@ -2438,7 +2438,34 @@ section:last-of-type {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 16px 40px;
+}
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.footer-credit {
+  text-align: right;
+  align-items: flex-end;
+}
+.footer-sub {
+  color: #5f928e;
+  font-size: 12px;
+}
+.footer-link {
+  color: #cdeee4;
+  font-weight: 600;
+  text-decoration: none;
+  width: max-content;
+  transition: color 0.2s var(--ease);
+}
+.footer-credit .footer-link {
+  font-size: 15px;
+}
+.footer-link:hover,
+.footer-link:focus-visible {
+  color: var(--green);
 }
 
 .toast {
