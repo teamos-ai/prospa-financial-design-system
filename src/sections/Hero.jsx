@@ -13,9 +13,9 @@ const heroMeta = [
 export default function Hero() {
   return (
     <header className="hero" id="overview">
-      <InteractiveGrid />
+      <InteractiveGrid variant="light" />
       <div className="wrap">
-        <div className="eyebrow" style={{ color: '#7fd4a0' }}>
+        <div className="eyebrow" style={{ color: 'var(--teal)' }}>
           Brand &amp; Product Design System
         </div>
         <h1>
