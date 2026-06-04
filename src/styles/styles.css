@@ -46,6 +46,10 @@ code,
   display: grid;
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
+  transition: grid-template-columns 0.32s var(--ease);
+}
+.app.nav-collapsed {
+  grid-template-columns: 0 1fr;
 }
 .sidebar {
   position: sticky;
@@ -55,10 +59,63 @@ code,
   background: var(--teal);
   color: #cfe6e3;
   padding: 32px 22px;
-  overflow-y: auto;
+  overflow: hidden auto;
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 22px;
+  min-width: 0;
+}
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex: none;
+}
+.side-toggle {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfe6e3;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.side-toggle:hover {
+  background: var(--green);
+  border-color: var(--green);
+  color: #0a363c;
+}
+/* Floating button to reopen the sidebar once collapsed. */
+.side-reopen {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 60;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  border: none;
+  background: var(--teal);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--sh-raise);
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.side-reopen:hover {
+  background: var(--teal-700);
+  transform: translateY(-1px);
+}
+.side-reopen[hidden] {
+  display: none;
 }
 .brand {
   display: flex;
@@ -128,10 +185,111 @@ code,
   opacity: 0.55;
 }
 .side-foot {
-  margin-top: auto;
+  flex: none;
   font-size: 11px;
   color: #56999a;
   line-height: 1.6;
+}
+
+/* ---- Meet the Team — infinite vertical marquee ---- */
+.team {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.team-label {
+  flex: none;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5fa6a4;
+  font-weight: 600;
+}
+.team-viewport {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 130px;
+  overflow: hidden;
+  /* Fade the top and bottom edges so cards melt in and out. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+.team-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  /* Roster is duplicated; -50% lands the 2nd copy exactly on the 1st. */
+  animation: team-scroll 26s linear infinite;
+  will-change: transform;
+}
+.team-viewport:hover .team-track {
+  animation-play-state: paused;
+}
+.team-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 11px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.team-av {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex: none;
+  object-fit: cover;
+}
+.team-av-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #08312f;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.team-meta {
+  min-width: 0;
+}
+.team-meta b {
+  display: block;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.team-meta span {
+  display: block;
+  font-size: 11px;
+  color: #8fc6c2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@keyframes team-scroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-track {
+    animation: none !important;
+  }
+  .team-viewport {
+    overflow-y: auto;
+  }
 }
 
 .main {
