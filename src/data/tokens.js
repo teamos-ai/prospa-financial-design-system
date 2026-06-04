@@ -110,6 +110,7 @@ export const navItems = [
   { id: 'cards', label: 'Cards' },
   { id: 'forms', label: 'Forms' },
   { id: 'components', label: 'Components' },
+  { id: 'powerup', label: 'Power-Up' },
   { id: 'icons', label: 'Iconography' },
   { id: 'library', label: 'Image Library' },
   { id: 'motion', label: 'Motion' },

@@ -10,6 +10,7 @@ import ButtonsSection from './sections/ButtonsSection.jsx'
 import CardsSection from './sections/CardsSection.jsx'
 import FormsSection from './sections/FormsSection.jsx'
 import ComponentsSection from './sections/ComponentsSection.jsx'
+import PowerUpSection from './sections/PowerUpSection.jsx'
 import IconsSection from './sections/IconsSection.jsx'
 import LibrarySection from './sections/LibrarySection.jsx'
 import MotionSection from './sections/MotionSection.jsx'
@@ -56,6 +57,7 @@ export default function App() {
             <CardsSection />
             <FormsSection />
             <ComponentsSection />
+            <PowerUpSection />
             <IconsSection />
             <LibrarySection />
             <MotionSection />
