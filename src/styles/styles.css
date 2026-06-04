@@ -67,11 +67,11 @@ code,
   height: 100vh;
   background: var(--teal);
   color: #cfe6e3;
-  padding: 20px 20px;
+  padding: 18px 18px 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
 }
 .sidebar-head {
@@ -168,11 +168,12 @@ code,
   flex: none;
 }
 .nav a {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #b6d6d2;
-  padding: 4px 12px;
+  padding: 3px 12px;
   border-radius: 9px;
   font-weight: 500;
+  line-height: 1.35;
   transition: all 0.2s var(--ease);
   display: flex;
   align-items: center;
@@ -197,10 +198,14 @@ code,
 /* ---- Meet the Team — swipe carousel ---- */
 .team {
   flex: none;
-  margin-top: 6px;
+  margin-top: auto;
+  /* override the global `section { padding: 80px 0 }` — this section lives in
+     the sidebar, not the page flow. */
+  padding: 0 0 4px;
+  border-bottom: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 7px;
 }
 .team-label {
   flex: none;
@@ -229,10 +234,10 @@ code,
 .tcard {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 6px;
   background: #f4f8f8;
   border-radius: 18px;
-  padding: 10px;
+  padding: 9px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 .tcard-head {
@@ -277,7 +282,7 @@ code,
   position: relative;
   border-radius: 13px;
   overflow: hidden;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   background: #e7efef;
 }
 .tcard-img {
@@ -303,8 +308,8 @@ code,
   color: var(--gray);
   padding: 0 3px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -507,6 +512,15 @@ section:last-of-type {
   background-color: transparent;
   pointer-events: auto;
   transition: background-color 0.55s var(--ease);
+}
+/* Light variant — faint grid on white, vignette-faded edges, soft lights. */
+.ig-light {
+  -webkit-mask-image: radial-gradient(ellipse 74% 72% at 50% 48%, #000 34%, transparent 100%);
+  mask-image: radial-gradient(ellipse 74% 72% at 50% 48%, #000 34%, transparent 100%);
+}
+.ig-light .ig-cell {
+  border-right-color: rgba(19, 95, 105, 0.07);
+  border-bottom-color: rgba(19, 95, 105, 0.07);
 }
 .hero h1 {
   color: #fff;
@@ -1373,35 +1387,49 @@ section:last-of-type {
 .ai-demo {
   position: relative;
   min-height: 100vh;
+  overflow: hidden;
+  background: #fff;
+}
+/* The interactive grid sits behind the content (white base, soft lights). */
+.ai-demo .ig-root {
+  z-index: 0;
+}
+.ai-inner {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 96px 40px;
-  overflow: hidden;
-  background: radial-gradient(34% 52% at 0% 50%, rgba(93, 206, 56, 0.12), transparent 72%),
-    radial-gradient(34% 52% at 100% 50%, rgba(19, 95, 105, 0.12), transparent 72%),
-    radial-gradient(48% 30% at 50% 0%, rgba(93, 206, 56, 0.06), transparent 70%),
-    radial-gradient(48% 34% at 50% 100%, rgba(19, 95, 105, 0.06), transparent 70%), #fff;
+  /* Let hover pass through the open areas to the grid behind; re-enable it
+     on the interactive controls only. */
+  pointer-events: none;
+}
+.ai-inner .ai-bar,
+.ai-inner .ai-chips,
+.ai-inner .ai-chat {
+  pointer-events: auto;
 }
 .ai-hero {
   text-align: center;
-  max-width: 640px;
-  margin: 0 auto 26px;
+  max-width: 760px;
+  margin: 0 auto 30px;
 }
 .ai-title {
-  font-size: 52px;
+  font-size: 62px;
   font-weight: 800;
   letter-spacing: -0.025em;
-  line-height: 1.05;
+  line-height: 1.04;
   color: var(--ink);
 }
 .ai-title em {
   font-style: normal;
-  color: var(--teal);
+  color: var(--green);
 }
 .ai-sub {
-  margin-top: 18px;
-  font-size: 18px;
+  margin-top: 20px;
+  font-size: 18.5px;
   color: var(--gray);
   line-height: 1.6;
 }
@@ -1427,19 +1455,24 @@ section:last-of-type {
   color: #7a5b33;
 }
 .ai-bar {
-  max-width: 760px;
+  max-width: 880px;
   margin: 0 auto;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 16px 18px 12px;
-  box-shadow: 0 14px 40px rgba(19, 95, 105, 0.1);
+  border-radius: 22px;
+  padding: 24px 26px 18px;
+  box-shadow: 0 20px 54px rgba(19, 95, 105, 0.13);
 }
 .ai-bar-input {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   color: var(--gray);
+}
+.ai-bar-input > svg {
+  width: 21px;
+  height: 21px;
+  flex: none;
 }
 .ai-bar-input input {
   flex: 1 1 auto;
@@ -1447,9 +1480,10 @@ section:last-of-type {
   outline: none;
   background: transparent;
   font-family: 'Poppins', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--ink);
   min-width: 0;
+  padding: 4px 0;
 }
 .ai-bar-input input::placeholder {
   color: #9aa6a6;
@@ -1467,7 +1501,7 @@ section:last-of-type {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
+  margin-top: 18px;
 }
 .ai-bar-left,
 .ai-bar-right {
@@ -1476,8 +1510,8 @@ section:last-of-type {
   gap: 8px;
 }
 .ai-ibtn {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -1490,8 +1524,8 @@ section:last-of-type {
   background: var(--bg1);
 }
 .ai-send {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: none;
   background: var(--ink);
@@ -1615,7 +1649,7 @@ section:last-of-type {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 52px;
 }
 .ai-chip {
   font-family: 'Poppins', sans-serif;

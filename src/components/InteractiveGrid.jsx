@@ -20,11 +20,22 @@ const GREENS = [
   '#a8e063cc',
 ]
 
-function randomGreen() {
-  return GREENS[Math.floor(Math.random() * GREENS.length)]
+// Soft tints for the light (white-background) variant — gentle mouse-follow
+// lights that keep the background reading as white.
+const LIGHT = [
+  'rgba(93, 206, 56, 0.20)',
+  'rgba(78, 181, 45, 0.17)',
+  'rgba(19, 95, 105, 0.12)',
+  'rgba(95, 166, 164, 0.15)',
+  'rgba(198, 90, 30, 0.12)',
+]
+
+function randomColor(variant) {
+  const pool = variant === 'light' ? LIGHT : GREENS
+  return pool[Math.floor(Math.random() * pool.length)]
 }
 
-function SubGrid() {
+function SubGrid({ variant }) {
   const [colors, setColors] = useState([null, null, null, null])
   const timeouts = useRef([null, null, null, null])
 
@@ -34,7 +45,7 @@ function SubGrid() {
       clearTimeout(t)
       timeouts.current[i] = null
     }
-    setColors((prev) => prev.map((c, j) => (j === i ? randomGreen() : c)))
+    setColors((prev) => prev.map((c, j) => (j === i ? randomColor(variant) : c)))
   }
 
   function leave(i) {
@@ -66,7 +77,7 @@ function SubGrid() {
   )
 }
 
-export default function InteractiveGrid() {
+export default function InteractiveGrid({ variant = 'dark' }) {
   const ref = useRef(null)
   const [grid, setGrid] = useState({ columns: 0, rows: 0 })
 
@@ -93,7 +104,7 @@ export default function InteractiveGrid() {
   const total = grid.columns * grid.rows
 
   return (
-    <div ref={ref} className="ig-root" aria-hidden="true">
+    <div ref={ref} className={'ig-root' + (variant === 'light' ? ' ig-light' : '')} aria-hidden="true">
       <div
         className="ig-main"
         style={{
@@ -102,7 +113,7 @@ export default function InteractiveGrid() {
         }}
       >
         {Array.from({ length: total }, (_, i) => (
-          <SubGrid key={`sg-${grid.columns}-${grid.rows}-${i}`} />
+          <SubGrid key={`sg-${grid.columns}-${grid.rows}-${i}`} variant={variant} />
         ))}
       </div>
     </div>

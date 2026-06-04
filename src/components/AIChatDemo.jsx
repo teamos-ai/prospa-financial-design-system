@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import InteractiveGrid from './InteractiveGrid.jsx'
 import { aiSuggestions, aiResponses, matchResponseKey, GENERAL_ADVICE_WARNING } from '../data/powerup.js'
 
 const I = (inner) => (
@@ -44,6 +45,8 @@ export default function AIChatDemo() {
 
   return (
     <div className="ai-demo">
+      <InteractiveGrid variant="light" />
+      <div className="ai-inner">
       <div className="ai-hero">
         <h3 className="ai-title">
           Your shortcut to <em>financial clarity</em>
@@ -151,6 +154,7 @@ export default function AIChatDemo() {
             <b>{s.cmd}</b> {s.label}
           </button>
         ))}
+      </div>
       </div>
     </div>
   )
