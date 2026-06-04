@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { team, initials } from '../data/team.js'
 
 // TeamMarquee — a seamless, infinitely-scrolling vertical column of team
@@ -5,8 +6,19 @@ import { team, initials } from '../data/team.js'
 // translateY 0 → -50%, so the second copy lands exactly where the first
 // began. Hover pauses it. Edges fade via a mask.
 function Avatar({ member }) {
-  if (member.photo) {
-    return <img className="team-av" src={member.photo} alt={member.name} loading="lazy" />
+  const [failed, setFailed] = useState(false)
+
+  if (member.photo && !failed) {
+    return (
+      <img
+        className="team-av"
+        src={member.photo}
+        alt={member.name}
+        width="38"
+        height="38"
+        onError={() => setFailed(true)}
+      />
+    )
   }
   return (
     <div className="team-av team-av-initials" style={{ background: member.accent }} aria-hidden="true">

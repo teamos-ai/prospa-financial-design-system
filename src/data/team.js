@@ -1,23 +1,23 @@
 // ============================================================
 // PROSPA FINANCIAL — team roster for the sidebar "Meet the Team"
-// infinite-scroll cards.
-//
-// TO ADD REAL PHOTOS: drop image files into `public/team/` (e.g.
-// public/team/peter.jpg) and set `photo: '/team/peter.jpg'` on the
-// matching member below. Until a photo is set, a branded initials
-// avatar is shown automatically. Names/roles are placeholders —
-// replace with the real team.
+// infinite-scroll cards. Names, roles and photos are the real
+// Prospa Financial team (prospafinancial.com.au/about-us).
+// Headshots live in public/team/. `accent` is the fallback avatar
+// colour shown if a photo ever fails to load.
 // ============================================================
 
 export const team = [
-  { name: 'Peter Nguyen', role: 'Principal Adviser', accent: '#5dce38', photo: null },
-  { name: 'Sarah Whitlock', role: 'Senior Financial Planner', accent: '#2fa86b', photo: null },
-  { name: 'James Okafor', role: 'Investment Strategist', accent: '#7fd4a0', photo: null },
-  { name: 'Aisha Rahman', role: 'Superannuation Specialist', accent: '#4eb52d', photo: null },
-  { name: 'Daniel Cooper', role: 'Retirement Adviser', accent: '#86e05a', photo: null },
-  { name: 'Mia Bennett', role: 'Client Relationships', accent: '#1f9d5b', photo: null },
-  { name: 'Tom Fraser', role: 'Estate Planning', accent: '#a8e063', photo: null },
-  { name: 'Olivia Chen', role: 'Paraplanner', accent: '#34b35a', photo: null },
+  { name: 'Peter Prvulj', role: 'Principal Financial Adviser', photo: '/team/peter.png', accent: '#5dce38' },
+  { name: 'Karthik Ganapathy', role: 'Senior Financial Adviser', photo: '/team/karthik.png', accent: '#2fa86b' },
+  { name: 'Neil Mistry', role: 'Financial Adviser', photo: '/team/neil.png', accent: '#7fd4a0' },
+  { name: 'Monik Palany', role: 'Provisional Adviser', photo: '/team/monik.png', accent: '#4eb52d' },
+  { name: 'Sam Ryan', role: 'Associate Adviser', photo: '/team/sam.jpg', accent: '#86e05a' },
+  { name: 'Sanika Mane', role: 'Associate Planner', photo: '/team/sanika.jpg', accent: '#1f9d5b' },
+  { name: 'Dinal De Silva', role: 'Senior Paraplanner', photo: '/team/dinal.png', accent: '#a8e063' },
+  { name: 'Margareta Paxinos', role: 'Practice Manager', photo: '/team/margareta.jpg', accent: '#34b35a' },
+  { name: 'Nic Masunda', role: 'Client Services Manager', photo: '/team/nic.jpg', accent: '#2fa86b' },
+  { name: 'Fiona Rintoul', role: 'Client Service Officer', photo: '/team/fiona.png', accent: '#5dce38' },
+  { name: 'James Larkworthy', role: 'Client Service Officer', photo: '/team/james.jpg', accent: '#4eb52d' },
 ]
 
 export function initials(name) {
