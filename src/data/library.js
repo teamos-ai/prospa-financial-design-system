@@ -16,6 +16,7 @@ export const libraryTags = [
   'Wellbeing',
   'Travel',
   'Outdoors',
+  'Nature',
   'Workplace',
   'Indoors',
 ]
@@ -49,4 +50,11 @@ export const libraryImages = [
   img('mature-couple-roadtrip-tailgate-view', 'Road Trip', 'Mature couple relaxing in a car tailgate enjoying the view', 1.777, ['Couples', 'Travel', 'Outdoors']),
   img('seniors-mountain-summit-binoculars-hiking', 'Summit Views', 'Seniors with binoculars overlooking snow-capped mountains', 1.0, ['Seniors', 'Travel', 'Outdoors', 'Wellbeing']),
   img('senior-couple-coastal-hike-ocean-vista', 'Coastal Hike', 'Senior couple with backpacks overlooking a coastal ocean vista', 1.0, ['Couples', 'Seniors', 'Travel', 'Outdoors']),
+  // Calculator backgrounds — on-brand nature textures (also used behind the Power-Up calculators).
+  img('clover-sprouts-fresh-growth', 'Fresh Growth', 'Fresh green clover sprouts catching the light', 0.667, ['Nature', 'Outdoors']),
+  img('dewy-grass-morning-bokeh', 'Morning Dew', 'Dew-tipped blades of grass against soft morning bokeh', 0.667, ['Nature', 'Outdoors']),
+  img('grassland-field-blue-sky-horizon', 'Open Horizon', 'Grassland field swaying under a clear blue sky', 0.563, ['Nature', 'Outdoors', 'Travel']),
+  img('golden-hour-meadow-grass-bokeh', 'Golden Hour', 'Meadow grass glowing in golden-hour light and bokeh', 0.562, ['Nature', 'Outdoors']),
+  img('timber-fence-forest-golden-light', 'Forest Fence', 'Timber post-and-rail fence in warm golden forest light', 0.563, ['Nature', 'Outdoors']),
+  img('dappled-leaf-shadows-green', 'Dappled Light', 'Soft leaf shadows dappled across a green surface', 0.563, ['Nature', 'Outdoors']),
 ]
