@@ -14,6 +14,7 @@ import PowerUpSection from './sections/PowerUpSection.jsx'
 import IconsSection from './sections/IconsSection.jsx'
 import LibrarySection from './sections/LibrarySection.jsx'
 import WidgetsSection from './sections/WidgetsSection.jsx'
+import BlocksSection from './sections/BlocksSection.jsx'
 import LeadMagnetsSection from './sections/LeadMagnetsSection.jsx'
 import MotionSection from './sections/MotionSection.jsx'
 import VoiceSection from './sections/VoiceSection.jsx'
@@ -64,6 +65,7 @@ export default function App() {
           <PowerUpSection />
           <div className="wrap">
             <WidgetsSection />
+            <BlocksSection />
             <IconsSection />
             <LibrarySection />
             <LeadMagnetsSection />
