@@ -38,9 +38,11 @@ export default function LeadMagnetsSection() {
   return (
     <section id="lead-magnets">
       <SectionHead eyebrow="Applied" title="Three Items Lead Magnet">
-        Ten session tools for the Executive Financial Wellbeing Workshop, built entirely from this
-        system — the same teal and green, the same Poppins scale, the same radii and soft teal
-        shadows, on a document shell designed to print. Click any card to open the live tool.
+        Twelve session tools for the Executive Financial Wellbeing Workshop, built entirely from
+        this system — the same teal and green, the same Poppins scale, the same radii and soft teal
+        shadows, on a document shell designed to print. Four interaction patterns run through them:
+        a scored assessment, shortcut tracking, checklists that cross out, a swipe-file fan and a
+        page-turning book. Click any card to open the live tool.
       </SectionHead>
 
       {/* ---- The flagship ---- */}
@@ -81,7 +83,7 @@ export default function LeadMagnetsSection() {
       </a>
 
       {/* ---- The other nine ---- */}
-      <div className="sub-h">The other nine · one per agenda item</div>
+      <div className="sub-h">The other eleven · one per agenda item</div>
       <div className="lm-grid">
         {leadMagnets.map((m) => (
           <a
@@ -146,6 +148,14 @@ export default function LeadMagnetsSection() {
             Scoring and every calculation run in the browser. Entries persist in
             <code> localStorage</code> only. No analytics, no third-party script, no form post —
             which is both a compliance position and, with this audience, a trust asset.
+          </p>
+        </div>
+        <div className="lm-note">
+          <h4>Four interaction patterns, no dependencies</h4>
+          <p>
+            The shortcut tracker, the strike-through checklists, the swipe-file fan and the
+            page-turning book are all in <code>components.js</code> — plain JavaScript and CSS 3D
+            transforms, so the sheets stay buildless and still print.
           </p>
         </div>
       </div>

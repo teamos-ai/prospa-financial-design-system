@@ -1,6 +1,6 @@
 // ============================================================
-// Three Items Lead Magnet — the session tools built on this
-// system for the Executive Financial Wellbeing Workshop.
+// Three Items Lead Magnet — the twelve session tools built on
+// this system for the Executive Financial Wellbeing Workshop.
 // Source: teamos-ai/lm-prospa, served from /lead-magnets/.
 // ============================================================
 
@@ -106,6 +106,24 @@ export const leadMagnets = [
     kind: 'Checklist',
     title: 'The Estate & Beneficiary Checklist',
     blurb:
-      'A will does not control super, and may not control the house. Seventeen checks on what actually decides where assets land.',
+      'A will does not control super, and may not control the house. Seventeen checks that cross themselves out as you work down them.',
+  },
+  {
+    no: '11',
+    slug: '11-conversation-swipe-file',
+    icon: 'Chat',
+    kind: 'Swipe file',
+    title: 'The Conversation Swipe File',
+    blurb:
+      'A fan of seven ready-to-send messages. The centre card turns over to show what is inside; the full text sits below, one copy button each.',
+  },
+  {
+    no: '12',
+    slug: '12-freedom-guide',
+    icon: 'Doc',
+    kind: 'Guide',
+    title: 'From High Income to Financial Independence',
+    blurb:
+      'A closed 3D book that opens into a page-turning reader — ten pages, two to a spread, one at a time on a phone.',
   },
 ]

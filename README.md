@@ -19,7 +19,7 @@ The site documents the full system, with scrollspy navigation:
   ghost), Cards (icon + numbered service variants), Forms (focus glow + error state +
   switch), Navigation, Badges, Accordion, Testimonial.
 - **Brand** — Voice & Tone (do / don't guidance).
-- **Applied** — *Three Items Lead Magnet*: the ten session tools built on this system for the
+- **Applied** — *Three Items Lead Magnet*: the twelve session tools built on this system for the
   Executive Financial Wellbeing Workshop, led by the Executive Wealth Score. Each card opens the
   live tool.
 
@@ -86,7 +86,7 @@ See [`vercel.json`](vercel.json).
 
 ## Three Items Lead Magnet
 
-The *Three Items Lead Magnet* section documents the system in use. It links to ten session tools
+The *Three Items Lead Magnet* section documents the system in use. It links to twelve session tools
 for Prospa Financial's Executive Financial Wellbeing Workshop, served from
 [`public/lead-magnets/`](public/lead-magnets) at `/lead-magnets/`:
 
@@ -102,11 +102,27 @@ for Prospa Financial's Executive Financial Wellbeing Workshop, served from
 | 08 | Wealth Structures, Compared | Comparison |
 | 09 | The Income Protection Audit | Audit |
 | 10 | The Estate & Beneficiary Checklist | Checklist |
+| 11 | The Conversation Swipe File — a fan of cards that turn over | Swipe file |
+| 12 | From High Income to Financial Independence — a page-turning book | Guide |
 
 They are plain static HTML with no build step, built on
 [`lead-magnets/assets/prospa.css`](public/lead-magnets/assets/prospa.css) — a direct port of
 [`tokens.css`](src/styles/tokens.css), so the two stay in step. Each sheet carries a print
 stylesheet and exports as a clean A4 PDF; everything runs in the browser and nothing is collected.
+
+Four interaction patterns run through them, all in
+[`components.js`](public/lead-magnets/assets/components.js) and all written in plain JavaScript and
+CSS 3D transforms:
+
+- **Shortcut tracking** — cheatsheet items carry chips for what they save and a stated trade-off;
+  the reader claims the ones that apply and a tally totals them.
+- **Strike-through checklists** — ticking crosses the item out while keeping its sub-line readable.
+- **The swipe-file fan** — seven cards in an arc; the centre one turns over to a spec sheet.
+- **The ebook** — a closed 3D book opening into a reader of real sheets rotated about the spine,
+  two pages to a spread or one at a time on a phone.
+
+The last two are behavioural ports of the Health OS design system's `SwipeFiles.tsx` and
+`Ebook.tsx`, rebuilt without React, framer-motion or react-pageflip.
 
 **Source of truth:** [`teamos-ai/lm-prospa`](https://github.com/teamos-ai/lm-prospa). The copy here
 exists so the reference site works standalone — update it there, then copy across. That repo also
