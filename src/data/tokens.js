@@ -112,6 +112,7 @@ export const navItems = [
   { id: 'components', label: 'Components' },
   { id: 'powerup', label: 'Power-Up' },
   { id: 'calculators', label: 'Calculators' },
+  { id: 'widgets', label: 'Widgets' },
   { id: 'icons', label: 'Iconography' },
   { id: 'library', label: 'Image Library' },
   { id: 'lead-magnets', label: 'Three Items Lead Magnet' },

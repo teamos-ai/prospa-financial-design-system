@@ -2902,3 +2902,261 @@ section:last-of-type {
     padding: 20px 22px;
   }
 }
+
+/* ============ WIDGETS — showcase grid ============ */
+.wgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s2);
+}
+.wcase {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+  overflow: hidden;
+}
+.wcase.wide {
+  grid-column: span 2;
+}
+.wcase-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--line-2);
+  background: var(--bg2);
+}
+.wcase-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--teal);
+  color: var(--white);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+.wcase-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.wcase-meta b {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.wcase-meta span {
+  font-size: 12.5px;
+  color: var(--gray);
+  line-height: 1.35;
+}
+/* A block container, deliberately: every widget fills the frame and caps
+   itself with its own max-width. A flex container would size each child from
+   its content instead, which a percentage-width widget cannot report, so the
+   layout would depend on each widget carrying an intrinsic width. */
+.wcase-body {
+  flex: 1;
+  padding: var(--s4);
+  min-width: 0;
+}
+.wcase-body > * {
+  max-width: 100%;
+}
+/* A widget narrower than its frame sits in the middle of it. */
+.wcase.center .wcase-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.wcase.center .wcase-body > * {
+  width: 100%;
+  margin-inline: auto;
+}
+/* The pricing card is the one widget that reads badly at full frame width. */
+.wcase .plan {
+  max-width: 360px;
+}
+
+/* ============ PRICING CARD ============ */
+.plan {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  transition: box-shadow var(--dur-base) var(--ease);
+}
+.plan:hover {
+  box-shadow: var(--sh-card);
+}
+.plan-featured {
+  border-color: var(--green-light);
+  box-shadow: var(--sh-card);
+}
+.plan-head {
+  padding: var(--s4);
+  background: var(--bg2);
+}
+.plan-featured .plan-head {
+  background: linear-gradient(160deg, var(--white) 0%, var(--green-soft) 100%);
+}
+.plan-head-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s1);
+}
+.plan-name {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  min-width: 0;
+}
+.plan-name h3 {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.plan-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  background: var(--white);
+  color: var(--teal);
+  box-shadow: var(--sh-card);
+}
+.plan-price {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--s2);
+}
+.plan-figure {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.plan-cadence {
+  font-size: 15px;
+  color: var(--gray);
+}
+.plan-note {
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+.plan-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--s4);
+  padding: var(--s4);
+}
+.plan-desc {
+  font-size: 15px;
+  color: var(--gray);
+  line-height: 1.55;
+}
+.plan-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+.plan-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s1);
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.plan-tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border-radius: var(--r-pill);
+  background: var(--neutral-soft);
+  color: var(--slate);
+}
+.plan-featured .plan-tick {
+  background: var(--green-soft);
+  box-shadow: inset 0 0 0 1px var(--green-light);
+  color: var(--green-600);
+}
+/* The guarantee is a property of the action, not of the feature list: tight
+   to the button so the two read as one control, and centred on it. */
+.plan-guarantee {
+  margin-top: auto;
+  padding-top: var(--s4);
+  display: flex;
+  justify-content: center;
+}
+.plan-guarantee span {
+  display: inline-flex;
+  align-items: center;
+  height: 25px;
+  padding: 0 var(--s1);
+  border-radius: var(--r-sm);
+  background: var(--green-light);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-align: center;
+}
+.plan-action {
+  margin-top: auto;
+}
+.plan-action.tight {
+  margin-top: var(--s0);
+}
+.plan-action .btn,
+.plan-action > a.btn {
+  width: 100%;
+  justify-content: center;
+}
+
+@media (max-width: 880px) {
+  .wgrid {
+    grid-template-columns: 1fr;
+  }
+  .wcase.wide {
+    grid-column: span 1;
+  }
+  .wcase-body {
+    padding: var(--s3);
+  }
+  .plan-figure {
+    font-size: 34px;
+  }
+}

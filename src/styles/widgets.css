@@ -1,0 +1,1582 @@
+/* ============================================================
+   WIDGETS — the thirty-one-piece widget library.
+
+   Ported from the Health OS design system, rebuilt on this system's
+   tokens: Poppins, the 5px spacing grid, the 10/15/20/30/100px radii and
+   the soft teal-tinted shadows. Every value here reads from tokens.css.
+
+   Three rules hold across the whole library:
+     · Nothing animates a layout property. Bars scale, rings sweep a
+       registered custom property, cards translate.
+     · Data colour follows the brand semantic in tones.js — green is a
+       positive outcome, ember a cost, teal the base.
+     · Every widget settles on its final state under reduced motion.
+   ============================================================ */
+
+/* The ring arc has to be registered before it can be transitioned. */
+@property --w-arc {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
+
+/* ---- Shared primitives ---------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.w-fig {
+  font-variant-numeric: tabular-nums;
+}
+
+.w-grow {
+  display: block;
+  border-radius: inherit;
+}
+.w-grow-x {
+  height: 100%;
+  transform-origin: left center;
+}
+.w-grow-y {
+  width: 100%;
+  transform-origin: center bottom;
+}
+
+/* A conic-gradient ring with a punched-out centre. */
+.w-ring {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--r-pill);
+}
+.w-ring-hole {
+  position: absolute;
+  border-radius: var(--r-pill);
+  background: var(--white);
+}
+.w-ring-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+
+/* An empty track a bar grows inside. */
+.w-track {
+  overflow: hidden;
+  background: var(--track);
+  border-radius: var(--r-sm);
+}
+.w-track-sm {
+  height: 8px;
+}
+.w-track-md {
+  height: 12px;
+}
+.w-track-lg {
+  height: 20px;
+}
+
+/* The two type roles widgets use beyond the global scale. */
+.w-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray);
+  line-height: 1.4;
+}
+.w-label-ink {
+  color: var(--ink);
+}
+.w-value,
+.w-value-sm {
+  display: block;
+}
+.w-value {
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.w-value-sm {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.15;
+}
+.w-body {
+  font-size: 15px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+.w-name {
+  font-size: 15px;
+  color: var(--ink);
+}
+
+/* Layout helpers, kept deliberately few. */
+.w-col {
+  display: flex;
+  flex-direction: column;
+}
+.w-row {
+  display: flex;
+  align-items: center;
+}
+.w-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.w-fill {
+  flex: 1;
+  min-width: 0;
+}
+.w-trunc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A pill chip — the system's badge pattern at widget scale. */
+.w-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: var(--r-sm);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.w-chip-green {
+  background: var(--green-soft);
+  box-shadow: inset 0 0 0 1px var(--green-light);
+}
+.w-chip-ember {
+  background: var(--ember-soft);
+  box-shadow: inset 0 0 0 1px var(--ember-light);
+}
+.w-chip-teal {
+  background: var(--teal-soft);
+  box-shadow: inset 0 0 0 1px var(--teal-light);
+}
+.w-chip-neutral {
+  background: var(--neutral-soft);
+  box-shadow: inset 0 0 0 1px var(--neutral-light);
+  color: var(--gray);
+}
+
+/* A legend dot. */
+.w-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+}
+
+/* The widget frame — one card recipe, matching .svc-card. */
+.w-frame {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+  padding: var(--s4);
+}
+
+/* A decorative white bloom on a full-strength tile. Behind content, and
+   it stops under reduced motion. */
+.w-bloom {
+  position: absolute;
+  inset: -30% 40% 40% -30%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 60%);
+  animation: w-bloom 6.5s ease-in-out infinite;
+}
+@keyframes w-bloom {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+/* ---- 01 · Stat tiles ------------------------------------------------- */
+.w-tiles {
+  display: grid;
+  gap: var(--s2);
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+.w-tile {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  padding: var(--s3);
+  color: var(--white);
+  box-shadow: var(--sh-card);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--dur-reveal) var(--ease), transform var(--dur-reveal) var(--ease);
+}
+.w-tile.in {
+  opacity: 1;
+  transform: none;
+}
+.w-tile-ic {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: var(--s5);
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--teal);
+}
+/* Figure and label are both spans, so they need to be made block here or the
+   count runs straight into its caption. */
+.w-tile .w-value,
+.w-tile .w-label {
+  display: block;
+  position: relative;
+  z-index: 1;
+  color: var(--white);
+}
+.w-tile .w-label {
+  margin-top: var(--s0);
+  opacity: 0.86;
+}
+
+/* ---- 02 · Gradient ring / 06 · Tracking cluster --------------------- */
+.w-ringblock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+}
+.w-ringblock p {
+  text-align: center;
+  max-width: 34ch;
+}
+.w-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: var(--s3);
+  width: 100%;
+}
+.w-cluster-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s1);
+}
+
+/* ---- 03 · Capacity meter -------------------------------------------- */
+.w-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  width: 320px;
+  max-width: 100%;
+}
+.w-meter-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.w-meter-total {
+  color: var(--gray);
+  font-weight: 500;
+}
+.w-meter-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+/* ---- 04 · Trend card ------------------------------------------------ */
+.w-trend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  width: 100%;
+}
+.w-trend svg {
+  display: block;
+  width: 100%;
+  height: 80px;
+  overflow: visible;
+}
+.w-trend-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1400ms var(--ease);
+}
+.w-trend-line.in {
+  stroke-dashoffset: 0;
+}
+.w-trend-area,
+.w-trend-peak {
+  opacity: 0;
+  transition: opacity 1200ms var(--ease) 400ms;
+}
+.w-trend-area.in,
+.w-trend-peak.in {
+  opacity: 1;
+}
+
+/* ---- 05 · Live timer ------------------------------------------------ */
+.w-timer {
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  box-shadow: var(--sh-raise);
+  padding: var(--s3);
+}
+.w-timer-state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+}
+.w-pulse {
+  position: relative;
+  display: flex;
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+}
+.w-pulse i {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--green);
+}
+.w-pulse.off i {
+  background: var(--neutral-light);
+}
+.w-pulse.on::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  background: var(--green);
+  opacity: 0.5;
+  animation: w-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes w-ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.w-timer-clock {
+  margin-top: var(--s2);
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.w-timer-clock span {
+  color: var(--gray);
+}
+.w-timer-foot {
+  margin-top: var(--s2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s1);
+}
+.w-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--green);
+  color: var(--white);
+  cursor: pointer;
+  transition: background-color var(--dur-snap) var(--ease), transform var(--dur-snap) var(--ease);
+}
+.w-icon-btn:hover {
+  background: var(--green-600);
+}
+.w-icon-btn:active {
+  transform: scale(0.97);
+}
+.w-icon-btn.ghost {
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--slate);
+}
+.w-icon-btn.ghost:hover {
+  border-color: var(--teal-light);
+  background: var(--bg2);
+}
+
+/* ---- 07 · Bar cluster ----------------------------------------------- */
+.w-bars-legend {
+  display: flex;
+  gap: var(--s3);
+}
+.w-bars-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s0);
+  font-size: 12.5px;
+  color: var(--gray);
+}
+.w-barcluster {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s0);
+  height: 136px;
+}
+.w-barcluster-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  flex: 1;
+  height: 100%;
+}
+.w-barcluster-group .w-grow {
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+.w-barcluster-axis {
+  display: flex;
+  gap: var(--s0);
+}
+.w-barcluster-axis span {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: var(--gray);
+}
+
+/* ---- 08 · Countdown ------------------------------------------------- */
+.w-countdown {
+  display: flex;
+  align-items: stretch;
+  gap: var(--s1);
+}
+.w-countdown-sep {
+  align-self: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--neutral-light);
+}
+.w-countdown-cell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 72px;
+  border-radius: var(--r-lg);
+  padding: var(--s2) var(--s1);
+  text-align: center;
+  color: var(--white);
+  box-shadow: var(--sh-card);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-countdown-cell.in {
+  opacity: 1;
+  transform: none;
+}
+.w-countdown-cell b,
+.w-countdown-cell span {
+  position: relative;
+  z-index: 1;
+  display: block;
+  color: var(--white);
+}
+.w-countdown-cell b {
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.w-countdown-cell span {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.86;
+}
+
+/* ---- Avatar (shared by 09, 15, 28) ---------------------------------- */
+.w-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.w-avatar-lg {
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 0 0 2px var(--white);
+}
+
+/* ---- Staggered row entry (09, 10, 25, 27, 28) ----------------------- */
+.w-stagger {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-stagger.in {
+  opacity: 1;
+  transform: none;
+}
+.w-pop {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-pop.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- 09 · Leaderboard ----------------------------------------------- */
+.w-board {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+.w-board-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+}
+.w-board-rank {
+  width: 16px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+.w-board-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- 10 · Agenda ---------------------------------------------------- */
+.w-agenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.w-agenda > li {
+  padding: var(--s1) 0;
+  border-top: 1px solid var(--line-2);
+}
+.w-agenda > li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.w-agenda-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+}
+.w-agenda-time {
+  width: 54px;
+  flex-shrink: 0;
+  font-size: 12.5px;
+  color: var(--gray);
+  font-variant-numeric: tabular-nums;
+}
+.w-agenda-rule {
+  width: 3px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--r-pill);
+}
+
+/* ---- 11 · Score gauge / 20 · Ticked gauge --------------------------- */
+.w-gauge {
+  position: relative;
+  width: 240px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.w-gauge svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+/* The dash pattern is set inline from the value; this owns only the sweep. */
+.w-gauge-arc {
+  transition: stroke-dashoffset 1400ms var(--ease);
+}
+.w-gauge-face {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  text-align: center;
+}
+.w-gauge-face .w-label,
+.w-rating-score .w-label {
+  display: block;
+}
+.w-tick {
+  opacity: 0.25;
+  transition: opacity var(--dur-snap) var(--ease);
+}
+.w-tick.in {
+  opacity: 1;
+}
+.w-gauge-ticked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.w-gauge-ticked .w-gauge-face {
+  position: static;
+  margin-top: -52px;
+}
+
+/* ---- 12 · Breakdown bar --------------------------------------------- */
+.w-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  width: 100%;
+}
+.w-breakdown-bar {
+  display: flex;
+  height: 20px;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--track);
+}
+.w-breakdown-seg {
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 600ms var(--ease);
+}
+.w-breakdown-seg.in {
+  transform: scaleX(1);
+}
+.w-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s0);
+}
+.w-legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--s0);
+  font-size: 15px;
+  color: var(--gray);
+}
+.w-legend li b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---- 13 · Activity heatmap ------------------------------------------ */
+.w-heat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  width: 100%;
+}
+.w-heat-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.w-heat-cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-heat-cell.in {
+  opacity: 1;
+  transform: none;
+}
+.w-heat-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s1);
+  flex-wrap: wrap;
+}
+.w-heat-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.w-heat-key i {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+}
+
+/* ---- 14 · Revenue card ---------------------------------------------- */
+.w-revenue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  width: 100%;
+}
+.w-revenue-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s1);
+}
+.w-revenue-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+.w-revenue-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+}
+.w-revenue-label {
+  width: 118px;
+  flex-shrink: 0;
+  font-size: 15px;
+  color: var(--gray);
+}
+.w-revenue-value {
+  width: 86px;
+  flex-shrink: 0;
+  text-align: right;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---- 15 · Avatar cluster -------------------------------------------- */
+.w-avatars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+.w-avatars-row {
+  display: flex;
+  align-items: center;
+}
+.w-avatars-row > * {
+  margin-left: -8px;
+}
+.w-avatars-row > *:first-child {
+  margin-left: 0;
+}
+.w-avatars-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--neutral-soft);
+  box-shadow: 0 0 0 2px var(--white);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--slate);
+}
+.w-avatars-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px dashed var(--neutral-light);
+  border-radius: var(--r-sm);
+  background: var(--white);
+  color: var(--gray);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--dur-snap) var(--ease), color var(--dur-snap) var(--ease);
+}
+.w-avatars-add:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+/* ---- 16 · Conversion funnel ----------------------------------------- */
+.w-funnel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  width: 100%;
+}
+.w-funnel-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+.w-funnel-label {
+  width: 118px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 15px;
+  color: var(--gray);
+}
+.w-funnel-slot {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+.w-funnel-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  min-width: 112px;
+}
+.w-funnel-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-sm);
+  box-shadow: var(--sh-card);
+  opacity: 0;
+  transform: scaleX(0.15);
+  transition: opacity 800ms var(--ease), transform 800ms var(--ease);
+}
+.w-funnel-fill.in {
+  opacity: 1;
+  transform: none;
+}
+.w-funnel-bar > b {
+  position: relative;
+  z-index: 1;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+}
+.w-funnel-note {
+  width: 108px;
+  flex-shrink: 0;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+
+/* ---- 17 · Metric strip ---------------------------------------------- */
+.w-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s1);
+  width: 100%;
+}
+.w-strip-cell {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--white);
+  padding: var(--s2);
+}
+.w-strip-cell .w-label,
+.w-strip-cell .w-value-sm {
+  display: block;
+}
+.w-strip-cell .w-value-sm {
+  margin-top: var(--s0);
+}
+.w-strip-rule {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+}
+.w-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--ink);
+}
+.w-delta span {
+  color: var(--gray);
+}
+.w-delta svg {
+  width: 13px;
+  height: 13px;
+}
+.w-delta.up svg {
+  color: var(--green-600);
+}
+.w-delta.down svg {
+  color: var(--ember);
+}
+
+/* ---- 18 · Category donut ------------------------------------------- */
+.w-donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s5);
+}
+.w-donut-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 20px), #000 calc(100% - 20px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 20px), #000 calc(100% - 20px));
+}
+.w-donut .w-legend li {
+  min-width: 170px;
+}
+
+/* ---- 19 · Progress rows --------------------------------------------- */
+.w-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  width: 100%;
+}
+.w-rows-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+.w-rows-head span {
+  color: var(--gray);
+}
+.w-rows-head b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---- 21 · Goal progress --------------------------------------------- */
+.w-goal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  width: 100%;
+}
+.w-goal-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.w-goal-value span {
+  color: var(--gray);
+  font-weight: 500;
+}
+.w-goal-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--gray);
+}
+
+/* ---- 22 · Comparison ------------------------------------------------ */
+.w-compare {
+  width: 100%;
+}
+.w-compare-row {
+  display: flex;
+  align-items: stretch;
+}
+.w-compare-side {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.w-compare-side.prev {
+  align-items: flex-end;
+  text-align: right;
+}
+.w-compare-side.prev .w-value {
+  color: var(--gray);
+}
+.w-compare-vs {
+  position: relative;
+  width: 1px;
+  margin: 0 var(--s4);
+  background: var(--line);
+}
+.w-compare-vs span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: var(--s0) 0;
+  background: var(--white);
+  font-size: 12px;
+  color: var(--gray);
+}
+.w-compare-foot {
+  margin-top: var(--s2);
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--dur-base) var(--ease) 1100ms, transform var(--dur-base) var(--ease) 1100ms;
+}
+.w-compare-foot.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- 23 · Mini calendar --------------------------------------------- */
+.w-cal {
+  width: 320px;
+  max-width: 100%;
+}
+.w-cal-head,
+.w-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.w-cal-head {
+  margin-bottom: var(--s0);
+}
+.w-cal-head span {
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gray);
+}
+.w-cal-day {
+  position: relative;
+  display: flex;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color var(--dur-snap) var(--ease), box-shadow var(--dur-snap) var(--ease);
+}
+.w-cal-day:hover {
+  background: var(--bg2);
+}
+.w-cal-day.today {
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 600;
+}
+.w-cal-day.sel {
+  background: var(--teal-soft);
+  box-shadow: inset 0 0 0 1px var(--teal);
+  font-weight: 600;
+}
+.w-cal-day i {
+  position: absolute;
+  bottom: 5px;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: var(--green-600);
+}
+
+/* ---- 24 · Slot picker ----------------------------------------------- */
+.w-slots {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.w-slots legend {
+  margin-bottom: var(--s1);
+  padding: 0;
+}
+.w-slots-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s0);
+}
+.w-slot {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--white);
+  padding: 9px 13px;
+  font: inherit;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color var(--dur-snap) var(--ease), background-color var(--dur-snap) var(--ease);
+}
+.w-slot:hover:not(:disabled) {
+  border-color: var(--teal-light);
+}
+.w-slot.sel {
+  border-color: transparent;
+  background: var(--teal);
+  color: var(--white);
+  font-weight: 600;
+}
+.w-slot:disabled {
+  border-color: transparent;
+  background: var(--neutral-soft);
+  color: var(--neutral-light);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+/* ---- 25 · Onboarding stepper ---------------------------------------- */
+.w-stepper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.w-stepper li {
+  position: relative;
+  display: flex;
+  gap: var(--s1);
+  padding-bottom: var(--s3);
+}
+.w-stepper li:last-child {
+  padding-bottom: 0;
+}
+.w-stepper-rule {
+  position: absolute;
+  left: 12px;
+  top: 30px;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+.w-step-mark {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 600;
+}
+.w-step-mark.done {
+  background: var(--green);
+  color: var(--white);
+}
+.w-step-mark.current {
+  background: var(--white);
+  border: 2px solid var(--teal);
+  color: var(--teal);
+}
+.w-step-mark.next {
+  background: var(--neutral-soft);
+  color: var(--gray);
+}
+.w-step-body b {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.w-step-body.next b {
+  color: var(--gray);
+}
+.w-step-body span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+
+/* ---- 27 · Toggle settings ------------------------------------------- */
+.w-toggles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  width: 100%;
+}
+.w-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+.w-toggle-row b {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.w-toggle-row em {
+  display: block;
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+.w-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--neutral-light);
+  cursor: pointer;
+  transition: background-color var(--dur-base) var(--ease);
+}
+.w-switch[aria-checked='true'] {
+  background: var(--green);
+}
+.w-switch i {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-pill);
+  background: var(--white);
+  box-shadow: 0 1px 3px rgba(10, 54, 60, 0.24);
+  transition: transform var(--dur-base) var(--ease);
+}
+.w-switch[aria-checked='true'] i {
+  transform: translateX(20px);
+}
+
+/* ---- 28 · Activity feed --------------------------------------------- */
+.w-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.w-feed li {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: var(--s1) 0;
+  border-top: 1px solid var(--line-2);
+}
+.w-feed li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.w-feed-text b {
+  font-weight: 600;
+  color: var(--ink);
+}
+.w-feed-time {
+  flex-shrink: 0;
+  font-size: 12.5px;
+  color: var(--gray);
+}
+
+/* ---- 29 · Rating summary -------------------------------------------- */
+.w-rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s5);
+  width: 100%;
+}
+.w-rating-score {
+  text-align: center;
+}
+.w-rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-top: var(--s0);
+}
+.w-rating-stars > span {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-rating-stars > span.in {
+  opacity: 1;
+  transform: none;
+}
+.w-rating-dist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s0);
+  flex: 1;
+  min-width: 170px;
+}
+.w-rating-dist li {
+  display: flex;
+  align-items: center;
+  gap: var(--s0);
+  font-size: 12.5px;
+  color: var(--gray);
+}
+.w-rating-dist li > span:first-child {
+  width: 10px;
+}
+
+/* ---- 30 · Assistant message ----------------------------------------- */
+.w-msg {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s1);
+  width: 100%;
+}
+.w-msg-face {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+}
+.w-msg-bubble {
+  max-width: 420px;
+  border-radius: var(--r-lg);
+  border-bottom-left-radius: var(--r-sm);
+  background: var(--bg2);
+  padding: var(--s2) var(--s3);
+}
+.w-msg-typing {
+  display: flex;
+  gap: 5px;
+  padding: var(--s1) 0;
+}
+.w-msg-typing i {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--r-pill);
+  background: var(--teal-light);
+  animation: w-typing 1.2s ease-in-out infinite;
+}
+.w-msg-typing i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.w-msg-typing i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes w-typing {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.w-msg-body {
+  font-size: 15px;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-msg-body.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---- 31 · Check-in -------------------------------------------------- */
+.w-checkin {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: center;
+}
+.w-checkin legend {
+  margin: 0 auto var(--s3);
+  padding: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.w-checkin-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--s1);
+}
+.w-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s0);
+  width: 62px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+}
+.w-face.in {
+  opacity: 1;
+  transform: none;
+}
+.w-face:active {
+  transform: scale(0.96);
+}
+.w-face svg {
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-sm);
+  transition: box-shadow var(--dur-snap) var(--ease);
+}
+.w-face.sel svg {
+  box-shadow: 0 0 0 2px var(--teal), 0 0 0 4px var(--white);
+}
+.w-face span {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+/* ---- Focus, shared -------------------------------------------------- */
+.w-cal-day:focus-visible,
+.w-slot:focus-visible,
+.w-switch:focus-visible,
+.w-face:focus-visible,
+.w-icon-btn:focus-visible,
+.w-avatars-add:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* ---- Responsive ----------------------------------------------------- */
+@media (max-width: 860px) {
+  .w-tiles {
+    grid-template-columns: 1fr;
+  }
+  .w-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .w-funnel-label,
+  .w-funnel-note {
+    width: 76px;
+  }
+  .w-revenue-label {
+    width: 92px;
+  }
+}
+@media (max-width: 560px) {
+  .w-compare-vs {
+    margin: 0 var(--s2);
+  }
+  .w-donut {
+    gap: var(--s3);
+  }
+  .w-checkin-row {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---- Reduced motion ------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .w-bloom,
+  .w-pulse.on::before,
+  .w-msg-typing i {
+    animation: none;
+  }
+  .w-tile,
+  .w-countdown-cell,
+  .w-stagger,
+  .w-pop,
+  .w-heat-cell,
+  .w-face,
+  .w-msg-body,
+  .w-compare-foot,
+  .w-funnel-fill,
+  .w-rating-stars > span {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .w-breakdown-seg {
+    transform: scaleX(1);
+    transition: none;
+  }
+  .w-trend-line {
+    stroke-dashoffset: 0;
+  }
+  .w-trend-line,
+  .w-gauge-arc {
+    transition: none;
+  }
+  .w-trend-area,
+  .w-trend-peak,
+  .w-tick {
+    opacity: 1;
+    transition: none;
+  }
+  .w-switch i {
+    transition: none;
+  }
+}
