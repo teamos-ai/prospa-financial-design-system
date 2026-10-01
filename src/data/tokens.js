@@ -114,6 +114,7 @@ export const navItems = [
   { id: 'calculators', label: 'Calculators' },
   { id: 'icons', label: 'Iconography' },
   { id: 'library', label: 'Image Library' },
+  { id: 'lead-magnets', label: 'Three Items Lead Magnet' },
   { id: 'motion', label: 'Motion' },
   { id: 'voice', label: 'Voice & Tone' },
 ]

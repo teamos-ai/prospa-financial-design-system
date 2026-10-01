@@ -19,6 +19,9 @@ The site documents the full system, with scrollspy navigation:
   ghost), Cards (icon + numbered service variants), Forms (focus glow + error state +
   switch), Navigation, Badges, Accordion, Testimonial.
 - **Brand** — Voice & Tone (do / don't guidance).
+- **Applied** — *Three Items Lead Magnet*: the ten session tools built on this system for the
+  Executive Financial Wellbeing Workshop, led by the Executive Wealth Score. Each card opens the
+  live tool.
 
 ## Tech stack
 
@@ -51,7 +54,8 @@ src/
   sections/           # the reference page, one file per section
     Hero, ColorSection, TypographySection, SpacingSection,
     RadiusSection, ButtonsSection, CardsSection, FormsSection,
-    ComponentsSection, IconsSection, MotionSection, VoiceSection
+    ComponentsSection, IconsSection, LibrarySection,
+    LeadMagnetsSection, MotionSection, VoiceSection
   App.jsx             # composes sidebar + sections
   main.jsx            # entry point
 ```
@@ -79,6 +83,35 @@ Audit Health Score **19/20 (Excellent)**. Full report in [`AUDIT.md`](AUDIT.md).
 
 Zero-config on **Vercel** — the Vite preset runs `npm run build` and serves `dist/`.
 See [`vercel.json`](vercel.json).
+
+## Three Items Lead Magnet
+
+The *Three Items Lead Magnet* section documents the system in use. It links to ten session tools
+for Prospa Financial's Executive Financial Wellbeing Workshop, served from
+[`public/lead-magnets/`](public/lead-magnets) at `/lead-magnets/`:
+
+| # | Tool | Type |
+|---|---|---|
+| 01 | **The Executive Wealth Score** — 18 questions, six weighted areas, a score out of 100 and a pattern engine | Scored assessment |
+| 02 | Your Financial Freedom Number | Calculator |
+| 03 | The Gap Years Map | Calculator |
+| 04 | The Next Dollar Decision Map | Decision guide |
+| 05 | The Three Wealth Buckets | Worksheet |
+| 06 | The Bonus & Surplus Playbook | Planner |
+| 07 | The Executive Super Cheatsheet | Cheatsheet |
+| 08 | Wealth Structures, Compared | Comparison |
+| 09 | The Income Protection Audit | Audit |
+| 10 | The Estate & Beneficiary Checklist | Checklist |
+
+They are plain static HTML with no build step, built on
+[`lead-magnets/assets/prospa.css`](public/lead-magnets/assets/prospa.css) — a direct port of
+[`tokens.css`](src/styles/tokens.css), so the two stay in step. Each sheet carries a print
+stylesheet and exports as a clean A4 PDF; everything runs in the browser and nothing is collected.
+
+**Source of truth:** [`teamos-ai/lm-prospa`](https://github.com/teamos-ai/lm-prospa). The copy here
+exists so the reference site works standalone — update it there, then copy across. That repo also
+holds `SCORING.md` (the Wealth Score model, its disclaimer and the approval items Prospa still
+owns) and `CLAIMS.md` (every figure with its source).
 
 ## Notes
 
