@@ -68,6 +68,7 @@ export default function LeadMagnetsSection() {
           </span>
         </div>
         <div className="lm-hero-visual">
+          <img className="lm-hero-art" src={`${BASE}${leadMagnetHero.art}`} alt="" loading="lazy" />
           <ScoreDial score={66} />
           <div className="lm-bars">
             {leadMagnetHero.profile.map((p) => (
@@ -93,6 +94,9 @@ export default function LeadMagnetsSection() {
             target="_blank"
             rel="noopener noreferrer"
           >
+            <span className="lm-card-art">
+              <img src={`${BASE}${m.art}`} alt="" loading="lazy" decoding="async" />
+            </span>
             <div className="lm-card-top">
               <span className="lm-ic">
                 <Icon name={m.icon} size={22} />

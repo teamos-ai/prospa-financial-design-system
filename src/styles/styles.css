@@ -3240,3 +3240,51 @@ section:last-of-type {
     padding: 0 20px;
   }
 }
+
+/* ------------------------------------------------------------
+   Three Items Lead Magnet — card and hero artwork
+   The magnets carry their own imagery now; these cards show it so
+   the section previews what the reader actually opens.
+   ------------------------------------------------------------ */
+
+.lm-card-art {
+  display: block;
+  margin: -26px -26px 18px;
+  aspect-ratio: 2.9 / 1;
+  overflow: hidden;
+  background: var(--bg2);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+
+.lm-card-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms var(--ease);
+}
+
+.lm-card:hover .lm-card-art img {
+  transform: scale(1.035);
+}
+
+.lm-hero-visual {
+  position: relative;
+  isolation: isolate;
+}
+
+.lm-hero-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.14;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-card:hover .lm-card-art img {
+    transform: none;
+  }
+}
