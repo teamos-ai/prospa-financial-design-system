@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import {
-  TAX_BRACKETS_2025_26,
+  TAX_BRACKETS_2026_27,
   MEDICARE_LEVY,
+  MEDICARE_LOW_INCOME,
   SUPER_GUARANTEE,
   CONCESSIONAL_CAP,
   CONTRIB_TAX,
@@ -246,7 +247,7 @@ function SuperCalc() {
               { label: 'Your extra', value: extra, display: `${fmt(extra)}/yr`, color: PALETTE.ember },
             ]}
           />
-          {overCap && <p className="calc-warn">Over the {fmt(CONCESSIONAL_CAP)} concessional cap for 2025–26.</p>}
+          {overCap && <p className="calc-warn">Over the {fmt(CONCESSIONAL_CAP)} concessional cap for 2026–27.</p>}
         </>
       }
     />
@@ -343,11 +344,11 @@ function MortgageCalc() {
   )
 }
 
-// 4) Income tax 2025-26 -------------------------------------------------------
+// 4) Income tax 2026-27 -------------------------------------------------------
 function incomeTax(x) {
   let tax = 0
   let prev = 0
-  for (const b of TAX_BRACKETS_2025_26) {
+  for (const b of TAX_BRACKETS_2026_27) {
     if (x > prev) {
       tax += (Math.min(x, b.upTo) - prev) * b.rate
       prev = b.upTo
@@ -362,10 +363,9 @@ function lito(x) {
   return 0
 }
 function medicare(x) {
-  const lower = 27222
-  const upper = 34027
+  const { lower, upper, taperPerDollar } = MEDICARE_LOW_INCOME
   if (x <= lower) return 0
-  if (x < upper) return Math.min(x * MEDICARE_LEVY, (x - lower) * 0.1)
+  if (x < upper) return Math.min(x * MEDICARE_LEVY, (x - lower) * taperPerDollar)
   return x * MEDICARE_LEVY
 }
 function TaxCalc() {
@@ -680,7 +680,7 @@ export default function Calculators() {
       </div>
       <Active />
       <p className="calc-disclaimer">
-        Estimates only, for illustration. Figures use 2025–26 Australian rates and don’t account for
+        Estimates only, for illustration. Figures use 2026–27 Australian rates and don’t account for
         every personal circumstance. General advice only — speak with a Prospa adviser before acting.
       </p>
     </div>

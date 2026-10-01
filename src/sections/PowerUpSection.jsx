@@ -15,7 +15,7 @@ export default function PowerUpSection() {
       <div className="wrap">
         <section id="calculators" className="calc-section">
           <SectionHead eyebrow="Power-Up" title="Interactive Calculators">
-            Four of the tools Australian financial planners reach for most — built on current 2025–26
+            Six of the tools Australian financial planners reach for most — built on current 2026–27
             rates. Drag the sliders to see the numbers update live.
           </SectionHead>
           <Calculators />

@@ -40,9 +40,9 @@ export default function LeadMagnetsSection() {
       <SectionHead eyebrow="Applied" title="Three Items Lead Magnet">
         Twelve session tools for the Executive Financial Wellbeing Workshop, built entirely from
         this system — the same teal and green, the same Poppins scale, the same radii and soft teal
-        shadows, on a document shell designed to print. Four interaction patterns run through them:
-        a scored assessment, shortcut tracking, checklists that cross out, a swipe-file fan and a
-        page-turning book. Click any card to open the live tool.
+        shadows, on a document shell designed to print. The scored assessment leads, and four
+        interaction patterns run through the rest: shortcut tracking, checklists that cross out, a
+        swipe-file fan and a page-turning book. Click any card to open the live tool.
       </SectionHead>
 
       {/* ---- The flagship ---- */}

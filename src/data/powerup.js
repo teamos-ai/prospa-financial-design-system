@@ -1,8 +1,9 @@
 // ============================================================
 // PROSPA FINANCIAL — "Example Power-Up" data
 // Mock AI assistant prompts/responses + Australian financial constants
-// used by the example calculators. Figures are 2025-26 (verified against
-// ATO / ASIC MoneySmart). Calculators are estimates for illustration only.
+// used by the example calculators. Figures are 2026-27 (verified against the
+// ATO and the figure register in teamos-ai/lm-prospa CLAIMS.md).
+// Calculators are estimates for illustration only.
 // ============================================================
 
 export const GENERAL_ADVICE_WARNING =
@@ -54,7 +55,7 @@ export const aiResponses = {
   sacrifice: {
     paras: [
       'Salary sacrifice redirects some pre-tax salary into super. Because concessional contributions are taxed at 15% rather than your marginal rate (up to 45%), it can be tax-effective.',
-      'Example: sacrificing $10,000 while on the 30% bracket saves roughly $1,500 in tax this year and boosts your retirement savings. The 2025–26 concessional cap is $30,000, including employer contributions.',
+      'Example: sacrificing $10,000 while on the 30% bracket saves roughly $1,500 in tax this year and boosts your retirement savings. The 2026–27 concessional cap is $32,500, including employer contributions.',
     ],
     bullets: [],
     cta: 'See the effect in the Income Tax and Superannuation calculators below.',
@@ -117,17 +118,23 @@ export function matchResponseKey(text) {
   return 'fallback'
 }
 
-// ---- Australian financial constants (2025-26) ----
+// ---- Australian financial constants (2026-27) ----
 // Resident income tax brackets: [upTo, rate]. Top band uses Infinity.
-export const TAX_BRACKETS_2025_26 = [
+// The second bracket stepped 16% → 15% on 1 July 2026, the second of the cuts
+// legislated in 2025; it steps down again on 1 July 2027, so re-check then.
+export const TAX_BRACKETS_2026_27 = [
   { upTo: 18200, rate: 0 },
-  { upTo: 45000, rate: 0.16 },
+  { upTo: 45000, rate: 0.15 },
   { upTo: 135000, rate: 0.3 },
   { upTo: 190000, rate: 0.37 },
   { upTo: Infinity, rate: 0.45 },
 ]
 export const MEDICARE_LEVY = 0.02
+// Low-income threshold and shade-in ceiling for a single taxpayer. Indexed each
+// year — 2026-27 values, raised 2.9% in the 2026-27 Budget.
+export const MEDICARE_LOW_INCOME = { lower: 28011, upper: 35013, taperPerDollar: 0.1 }
+// LITO is not indexed; unchanged since 2022-23.
 export const LITO = { max: 700, fullUpTo: 37500, phaseOutEnd: 45000, taperPerDollar: 0.05 }
-export const SUPER_GUARANTEE = 0.12 // 2025-26
-export const CONCESSIONAL_CAP = 30000 // 2025-26
+export const SUPER_GUARANTEE = 0.12 // legislated maximum, reached 1 July 2025
+export const CONCESSIONAL_CAP = 32500 // 2026-27 (was $30,000 to 2025-26)
 export const CONTRIB_TAX = 0.15
