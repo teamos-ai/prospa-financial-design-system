@@ -17,6 +17,25 @@
   --ember-strong: #a8481a;
   --ember-soft: #f9ece2;
 
+  /* Data ramp — the shades widgets and charts draw with. Full strength carries
+     the datum (--teal / --green / --ember above); light partners it inside a
+     gradient or a second series; soft fills tiles, wells and tinted grounds.
+     The brand semantic holds across every widget: green reads as a positive
+     outcome, ember as a cost or an adverse result, teal as the base or
+     principal. Neutral is for an unattributed remainder. */
+  --teal-light: #5fa6a4;
+  --teal-soft: #e7efef;
+  --green-light: #a8e88f;
+  --green-soft: #e8f5e2;
+  --ember-light: #e9a87e;
+  /* --ember-soft is declared with the brand ember above */
+  --neutral: #8fa3a5;
+  --neutral-light: #c2cccd;
+  --neutral-soft: #edf1f1;
+
+  /* Empty tracks, unlit ticks and hairlines inside widgets */
+  --track: #e6ecec;
+
   /* Backgrounds */
   --bg0: #ffffff;
   --bg1: #f2fbef;
@@ -45,6 +64,19 @@
   --r-lg: 20px;
   --r-xl: 30px;
   --r-pill: 100px;
+
+  /* Spacing — the documented 5px grid, as tokens rather than documentation only.
+     Section rhythm uses s6 and up; widget internals use s0 to s5. */
+  --s0: 5px;
+  --s1: 10px;
+  --s2: 15px;
+  --s3: 20px;
+  --s4: 25px;
+  --s5: 30px;
+  --s6: 40px;
+  --s7: 50px;
+  --s8: 70px;
+  --s9: 100px;
 
   /* Layout */
   --maxw: 1080px;

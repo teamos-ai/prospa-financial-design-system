@@ -158,6 +158,15 @@ export default function LeadMagnetsSection() {
             transforms, so the sheets stay buildless and still print.
           </p>
         </div>
+        <div className="lm-note">
+          <h4>One widget vocabulary for every number</h4>
+          <p>
+            <code>widgets.js</code> holds the score gauge, metric strip, breakdown bar, goal
+            progress, progress rows, comparison, donut, stepper and projection chart — this system's
+            calculator bento and the Health OS widget library, in plain JavaScript. Each one takes
+            real data, animates once into view, and settles immediately under reduced motion.
+          </p>
+        </div>
       </div>
 
       <div className="lm-strip">

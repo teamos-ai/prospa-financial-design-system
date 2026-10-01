@@ -31,10 +31,10 @@ export const leadMagnets = [
     no: '02',
     slug: '02-freedom-number',
     icon: 'Wealth',
-    kind: 'Calculator',
-    title: 'Your Financial Freedom Number',
+    kind: 'Guided calculator',
+    title: 'Your Freedom Score',
     blurb:
-      'The capital a chosen lifestyle calls for, what the current trajectory produces, and the gap between — with a projection chart and the lever that closes it fastest.',
+      'A four-step walk-through ending in a score out of 100 — the capital target, the trajectory, the funding split, and the two numbers nobody calculates: your freedom age and what it would take to reach it on time.',
   },
   {
     no: '03',
