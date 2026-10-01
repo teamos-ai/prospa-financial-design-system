@@ -32,9 +32,9 @@ export const leadMagnets = [
     slug: '02-freedom-number',
     icon: 'Wealth',
     kind: 'Guided calculator',
-    title: 'Your Freedom Score',
+    title: 'Your Work Optional Number',
     blurb:
-      'A four-step walk-through ending in a score out of 100 — the capital target, the trajectory, the funding split, and the two numbers nobody calculates: your freedom age and what it would take to reach it on time.',
+      'Five steps to what you need outside super to stop before 60, with the whole plan in one chart — building, drawing down, and the step where superannuation takes over.',
   },
   {
     no: '03',
