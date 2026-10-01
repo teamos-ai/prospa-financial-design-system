@@ -3160,3 +3160,83 @@ section:last-of-type {
     font-size: 34px;
   }
 }
+
+/* ============ PHONE ============
+   The system had one breakpoint, at 1080px, and nothing below it: grids that
+   collapsed from four columns to two or three stayed there all the way down to
+   a 375px phone, where a two-column grid of padded cards is wider than the
+   screen. That put 261px of horizontal scroll on the page.
+
+   Each rule below closes one measured overflow rather than capping the page
+   with overflow-x:hidden, which would have hidden the symptom and left the
+   content unreachable. */
+@media (max-width: 760px) {
+  /* The hero chip row was six fixed 64px swatches at width:max-content — 384px
+     against a 319px column. Let them share the width instead. */
+  .swatch-row {
+    width: 100%;
+  }
+  .swatch-row i {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* The type specimen put a fixed 200px spec column beside a 1fr that floors at
+     the min-content width of a 56px display word. Stacked, each gets the full
+     column and nothing has to floor. */
+  .type-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    align-items: start;
+  }
+  /* Right-aligned beside the specimen, left-aligned under it. */
+  .type-row .specs {
+    font-size: 12px;
+    text-align: left;
+  }
+
+  /* Two columns of 30px-padded cards do not fit a phone. */
+  .card-grid,
+  .shadow-grid,
+  .principle,
+  .svc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .svc-card {
+    padding: 22px;
+  }
+
+  /* Four across is the most a 375px screen holds for the smaller tiles. */
+  .color-grid,
+  .tile-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .icon-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* The nav demo laid a flex row of links beside a phone number with no wrap,
+     which alone pushed the document to 636px. */
+  .nav-demo {
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 16px 18px;
+  }
+  .nav-demo .links {
+    flex-wrap: wrap;
+    gap: 14px 18px;
+  }
+
+  /* The widget showcase frame and its header. */
+  .wcase-body {
+    padding: var(--s2);
+  }
+  .wcase-head {
+    padding: var(--s1) var(--s2);
+  }
+
+  .wrap {
+    padding: 0 20px;
+  }
+}

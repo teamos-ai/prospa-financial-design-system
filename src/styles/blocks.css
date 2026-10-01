@@ -379,12 +379,27 @@
 }
 .ptable {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--s3);
   align-items: stretch;
 }
 .ptable.two {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+/* Three plan cards stop fitting well before the phone breakpoint, and a media
+   query counts the scrollbar — at a 768px tablet `max-width: 760px` is false,
+   so the table has to collapse on a breakpoint of its own. 880px also matches
+   the width at which the cards stop fanning out. */
+@media (max-width: 880px) {
+  .ptable,
+  .ptable.two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ptable-cell.in.fore,
+  .ptable-cell.in.back-l,
+  .ptable-cell.in.back-r {
+    transform: none;
+  }
 }
 .ptable-cell {
   position: relative;
@@ -1318,7 +1333,22 @@
   .pbento-wide,
   .fbento-hero-split,
   .cstudy-figures {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* A testimonial card is a fixed 320px in the drifting wall; in a column it
+     has to take the width it is given. */
+  .tcols .tcard {
+    width: 100%;
+  }
+  .cstudy-head,
+  .cstudy-movements {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cstudy-head,
+  .cstudy-figures,
+  .cstudy-movements,
+  .cstudy-quote {
+    padding: var(--s3);
   }
   .bento-cell.span-2,
   .bento-cell.span-3,
